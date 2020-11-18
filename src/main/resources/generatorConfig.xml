@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC
+                "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+                "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+<context id="DB2Tables" targetRuntime="MyBatis3">
+    <!-- 本地插件，自动注解 @Data -->
+    <plugin type="com.cy.mybatis.generator.lombok.plugins.LombokPlugin"/>
+    <!-- 本地插件，生成数据库注释 -->
+    <plugin type="com.cy.mybatis.generator.lombok.plugins.CommentPlugin"/>
+
+    <!-- ===================== 序列化      toString  ======================== -->
+    <!-- <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+          <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+     -->
+    <!-- 配置数据库连接 -->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                    connectionURL="jdbc:mysql://localhost:3306/zuji"
+                    userId="root"
+                    password="123">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+        <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <!-- 指定pojo的生成位置 -->
+    <javaModelGenerator targetPackage="top.testcross.zuji.bean" targetProject="src/main/java">
+        <property name="enableSubPackages" value="true" />
+        <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+    <!-- 指定sql映射文件的生成位置 -->
+    <sqlMapGenerator targetPackage="mybatis/mapper"  targetProject="src/main/resources" >
+        <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <!-- 生成dao接口 -->
+    <javaClientGenerator type="XMLMAPPER" targetPackage="top.testcross.zuji.mapper"  targetProject="src/main/java">
+        <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>
+
+    <!-- 指定逆向生成哪张表 -->
+<!--    <table schema="DB2ADMIN" tableName="uim_user" domainObjectName="UimUser" >-->
+<!--    </table>-->
+
+<!--    <table schema="DB2ADMIN" tableName="uim_follow" domainObjectName="UimFollow" >-->
+<!--    </table>-->
+
+<!--    <table schema="DB2ADMIN" tableName="pm_post"  >-->
+<!--        <columnOverride column="post_intro" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--    </table>-->
+
+
+<!--    <table schema="DB2ADMIN" tableName="pam_like"  >-->
+<!--    </table>-->
+
+<!--    <table schema="DB2ADMIN" tableName="pam_favorite"  >-->
+<!--    </table>-->
+
+<!--    <table schema="DB2ADMIN" tableName="pam_comment"  >-->
+<!--        <columnOverride column="cmt_cont" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--    </table>-->
+
+<!--    <table schema="DB2ADMIN" tableName="bm_user_mark"  >-->
+<!--    </table>-->
+
+<!--    <table schema="DB2ADMIN" tableName="bm_tag"  >-->
+<!--        <columnOverride column="tag_intro" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--    </table>-->
+
+<!--    <table schema="DB2ADMIN" tableName="bm_post_mark"  >-->
+<!--    </table>-->
+
+<!--    <table schema="DB2ADMIN" tableName="bm_message_h"  >-->
+<!--        <columnOverride column="msg_cont" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--    </table>-->
+
+    <table schema="DB2ADMIN" tableName="bm_message"  >
+    </table>
+
+<!--    <table schema="DB2ADMIN" tableName="bm_img"  >-->
+<!--        <columnOverride column="img_cont" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--    </table>-->
+
+<!--    <table schema="DB2ADMIN" tableName="bm_geo_placeinfo"  >-->
+<!--        <columnOverride column="pi_address" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--    </table>-->
+</context>
+</generatorConfiguration>

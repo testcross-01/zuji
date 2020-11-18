@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: dev
+
+mybatis:
+  ###实体类位置
+  type-aliases-package: top.testcross.zuji.bean
+  #mapper.xml所在位置
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+server:
+  port: 8020
