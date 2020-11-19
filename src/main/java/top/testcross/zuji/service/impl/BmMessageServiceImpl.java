@@ -54,7 +54,8 @@ public class BmMessageServiceImpl implements IBmMessageService {
         //查出所有未处理消息
         BmMessageExample messageExample=new BmMessageExample();
         messageExample.createCriteria().andMsgIsDealEqualTo(false);
-        List<BmMessage> messages=messageMapper.selectByExample(messageExample);
+
+        List<BmMessage> messages=(List<BmMessage>) DaoUtil.selectByExample(messageMapper,messageExample);
 
         //构建post id集合
         List<String> postIds=new LinkedList<>();

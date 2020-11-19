@@ -54,4 +54,15 @@ public class PamLike implements ActionDataBean {
         BmMessage message=new BmMessage(null,(byte)1,userId,likeCreateTime,postId,false);
         return message;
     }
+
+    public PamLike(){
+
+    }
+
+    public PamLike(String likeId, String userId, String postId, Date likeCreateTime) {
+        this.likeId = likeId;
+        this.userId = userId;
+        this.postId = postId;
+        this.likeCreateTime = likeCreateTime;
+    }
 }

@@ -135,4 +135,25 @@ public class PmPost implements DataBean {
         setPostId(uuid);
     }
 
+    public PmPost() {
+    }
+
+    public PmPost(String postId, Integer postLikeCount, Integer postFavCount, Integer postCmtCount, Integer postImgCount, String postCpImgId, Boolean postVisible, String postIntroCommentId, String postIntro, String piId, String userId, Date postCreateTime, BmGeoPlaceinfo placeinfo, List<BmImg> imgs, List<BmTag> tags, BmImg cpImg) {
+        this.postId = postId;
+        this.postLikeCount = postLikeCount;
+        this.postFavCount = postFavCount;
+        this.postCmtCount = postCmtCount;
+        this.postImgCount = postImgCount;
+        this.postCpImgId = postCpImgId;
+        this.postVisible = postVisible;
+        this.postIntroCommentId = postIntroCommentId;
+        this.postIntro = postIntro;
+        this.piId = piId;
+        this.userId = userId;
+        this.postCreateTime = postCreateTime;
+        this.placeinfo = placeinfo;
+        this.imgs = imgs;
+        this.tags = tags;
+        this.cpImg = cpImg;
+    }
 }

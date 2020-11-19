@@ -100,4 +100,21 @@ public class UimUser implements DataBean {
     public void setUUID(String uuid) {
         setUserId(uuid);
     }
+
+    public UimUser() {
+    }
+
+    public UimUser(String userId, Integer userPostCount, Integer userImgCount, Byte userSex, Integer userLafCount, String userName, String userDpId, String userPassword, String userIntro, Integer userFollowerCount, Integer userFollowCount) {
+        this.userId = userId;
+        this.userPostCount = userPostCount;
+        this.userImgCount = userImgCount;
+        this.userSex = userSex;
+        this.userLafCount = userLafCount;
+        this.userName = userName;
+        this.userDpId = userDpId;
+        this.userPassword = userPassword;
+        this.userIntro = userIntro;
+        this.userFollowerCount = userFollowerCount;
+        this.userFollowCount = userFollowCount;
+    }
 }

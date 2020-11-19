@@ -1,11 +1,15 @@
 package top.testcross.zuji.util;
 
 
+import org.springframework.jdbc.BadSqlGrammarException;
 import top.testcross.zuji.bean.interfaces.DataBean;
+import top.testcross.zuji.bean.interfaces.Example;
 import top.testcross.zuji.mapper.Mapper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -18,6 +22,7 @@ public class DaoUtil {
     private static final String NO_SUCH_METHOD="mapper中不包含此类方法";
     private static final String ILLEGAL_ACCESS="方法使用了错误的参数";
     private static final String INVOKE_EXCEPTION="方法执行错误";
+    private static final String BAD_SQL_EXCEPTION="sql有误";
     private static final String WTF="耗子尾汁";//乱调用方法导致错误
 
 
@@ -187,6 +192,40 @@ public class DaoUtil {
 
                 }
             };
+        }
+
+    }
+
+    /**
+     * selectByExample统一入口
+     * @param mapper
+     * @param example
+     * @return 查询到的集合
+     */
+    public  static List<? extends DataBean> selectByExample(Mapper mapper, Example example){
+        try{
+            Method selectByExample=mapper.getClass().getMethod("selectByExample",example.getClass());
+            return (List<? extends DataBean>)selectByExample.invoke(mapper,example);
+        }catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            System.out.println(NO_SUCH_METHOD);
+            return new LinkedList<>();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            System.out.println(ILLEGAL_ACCESS);
+            return new LinkedList<>();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            System.out.println(INVOKE_EXCEPTION);
+            return new LinkedList<>();
+        }catch (BadSqlGrammarException e) {
+            e.printStackTrace();
+            System.out.println(BAD_SQL_EXCEPTION);
+            return new LinkedList<>();
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(WTF);
+            return new LinkedList<>();
         }
 
     }

@@ -95,4 +95,20 @@ public class PamComment implements ActionDataBean {
         BmMessage message=new BmMessage(null,(byte)1,userId,cmtCreateTime,postId,false);
         return message;
     }
+
+    public PamComment(){
+
+    }
+
+    public PamComment(String cmtId, String cmtCont, String postId, String cmtParentId, String userId, Byte cmtType, String cmtTargetUserId, Date cmtCreateTime, List<PamComment> comments) {
+        this.cmtId = cmtId;
+        this.cmtCont = cmtCont;
+        this.postId = postId;
+        this.cmtParentId = cmtParentId;
+        this.userId = userId;
+        this.cmtType = cmtType;
+        this.cmtTargetUserId = cmtTargetUserId;
+        this.cmtCreateTime = cmtCreateTime;
+        this.comments = comments;
+    }
 }

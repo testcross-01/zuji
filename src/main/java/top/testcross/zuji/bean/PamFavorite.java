@@ -62,4 +62,16 @@ public class PamFavorite implements ActionDataBean {
         BmMessage message=new BmMessage(null,(byte)1,userId,favCreateTime,postId,false);
         return message;
     }
+
+    public PamFavorite(){
+
+    }
+
+    public PamFavorite(String favId, String userId, String postId, String piId, Date favCreateTime) {
+        this.favId = favId;
+        this.userId = userId;
+        this.postId = postId;
+        this.piId = piId;
+        this.favCreateTime = favCreateTime;
+    }
 }

@@ -13,12 +13,14 @@ import top.testcross.zuji.service.IPamCommentService;
 import top.testcross.zuji.service.IPamService;
 import top.testcross.zuji.util.DaoUtil;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PamCommentServiceImpl implements IPamCommentService {
-    private static final String BASE_COMMENT="";
+    private static final String BASE_COMMENT="-1";
 
     @Autowired
     PamCommentMapper pamCommentMapper;
@@ -87,23 +89,24 @@ public class PamCommentServiceImpl implements IPamCommentService {
         example.setOrderByClause("cmt_id asc");
         List<PamComment> comments=pamCommentMapper.selectByExample(example);
 
+        //构造评论map
+        Map<String,PamComment> commentMap=new HashMap<>();
+        for(PamComment comment:comments){
+            commentMap.put(comment.getCmtId(),comment);
+        }
 
+        //搜索所有子评论
         example=new PamCommentExample();
         example.createCriteria().andPostIdEqualTo(postID).andCmtParentIdNotEqualTo(BASE_COMMENT);
-        example.setOrderByClause("cmt_parent_id asc");
+
         //筛选出对应动态的所有子评论 按评论id排序
         List<PamComment> chidComments=pamCommentMapper.selectByExample(example);
         int index=0;
-        for(PamComment pamComment:comments){
-            pamComment.setComments(new LinkedList<PamComment>());
-            for(;index<chidComments.size();index++){
-                PamComment chidComment=chidComments.get(index);
-                if(chidComment.getCmtParentId()==pamComment.getCmtId()){
-                    pamComment.getComments().add(chidComment);
-                }else {
-                    break;
-                }
-            }
+        for(PamComment childComment:chidComments){
+           PamComment comment=commentMap.get(childComment.getCmtParentId());
+           if(comment==null)continue;
+           if(comment.getComments()==null)comment.setComments(new LinkedList<>());
+           comment.getComments().add(childComment);
         }
         return comments;
     }

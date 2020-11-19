@@ -66,6 +66,8 @@ public class PmPostServiceImpl implements IPmPostService {
 
     @Override
     public List<? extends DataBean> findPostInIds(List<String> ids) {
+        if(ids.size()<=0)return new LinkedList<>();
+
         //根据id查询所有对应动态
         PmPostExample pmPostExample=new PmPostExample();
         pmPostExample.createCriteria().andPostIdIn(ids);
@@ -87,6 +89,8 @@ public class PmPostServiceImpl implements IPmPostService {
 
     @Override
     public List<? extends DataBean> findPartPostInIds(List<String> ids) {
+        if(ids.size()<=0)return new LinkedList<>();
+
         //根据id查询所有对应动态
         PmPostExample pmPostExample=new PmPostExample();
         pmPostExample.createCriteria().andPostIdIn(ids);
@@ -134,6 +138,8 @@ public class PmPostServiceImpl implements IPmPostService {
      * @param postMap
      */
     private void addTagsToPosts(List<String> postIds,HashMap<String,PmPost> postMap){
+        if(postIds.size()==0)return;
+
         //根据动态id查询出所有的mark记录
         BmPostMarkExample postMarkExample=new BmPostMarkExample();
         postMarkExample.createCriteria().andPostIdIn(postIds);
@@ -148,7 +154,9 @@ public class PmPostServiceImpl implements IPmPostService {
         //根据tagid查询tag集合
         BmTagExample bmTagExample=new BmTagExample();
         bmTagExample.createCriteria().andTagIdIn(tagIds);
-        List<BmTag> tags=bmTagMapper.selectByExample(bmTagExample);
+        List<BmTag> tags=tagIds.size()<=0?new LinkedList<>():  bmTagMapper.selectByExample(bmTagExample);
+
+
 
         //建立tag map
         HashMap<String,BmTag> tagMap=new HashMap<>();
@@ -173,6 +181,8 @@ public class PmPostServiceImpl implements IPmPostService {
      * @param postMap
      */
     private void addImgsToPosts(List<String> postIds,HashMap<String,PmPost> postMap){
+        if(postIds.size()<=0)return;
+
         //根据动态id搜索所有图片
         BmImgExample imgExample=new BmImgExample();
         imgExample.createCriteria().andImgSrcTypeEqualTo((byte) 1).andImgSrcIdIn(postIds);
@@ -203,7 +213,7 @@ public class PmPostServiceImpl implements IPmPostService {
         //查询出所有地址信息
         BmGeoPlaceinfoExample placeinfoExample=new BmGeoPlaceinfoExample();
         placeinfoExample.createCriteria().andPiIdIn(piIds);
-        List<BmGeoPlaceinfo> placeinfos=placeinfoMapper.selectByExample(placeinfoExample);
+        List<BmGeoPlaceinfo> placeinfos=piIds.size()==0?new LinkedList<>():placeinfoMapper.selectByExample(placeinfoExample);
 
 
         //构建pi map
