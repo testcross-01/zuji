@@ -27,13 +27,12 @@ public class UimFollowServiceImpl implements IUimFollowService {
 
     @Override
     public int modifyByID(DataBean dataBean) {
-        UimFollow uimFollow=(UimFollow) dataBean;
-        return uimFollowMapper.updateByPrimaryKey(uimFollow);
+        return DaoUtil.updateByID(uimFollowMapper,dataBean);
     }
 
     @Override
     public DataBean findByID(String id) {
-        return uimFollowMapper.selectByPrimaryKey(id);
+        return DaoUtil.selectByID(uimFollowMapper,id);
     }
 
 

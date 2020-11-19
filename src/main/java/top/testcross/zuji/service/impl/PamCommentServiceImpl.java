@@ -49,7 +49,7 @@ public class PamCommentServiceImpl implements IPamCommentService {
         //查询出用户的所有动态
         PmPostExample postExample=new PmPostExample();
         postExample.createCriteria().andUserIdEqualTo(id);
-        List<PmPost> posts=pmPostMapper.selectByExample(postExample);
+        List<PmPost> posts=(List<PmPost>) DaoUtil.selectByExample(pmPostMapper,postExample);
 
         //计算所有动态的总评论数
         int count=0;
@@ -87,7 +87,8 @@ public class PamCommentServiceImpl implements IPamCommentService {
         //筛选出对应动态的非子评论 按评论id排序
         example.createCriteria().andPostIdEqualTo(postID).andCmtParentIdEqualTo(BASE_COMMENT);
         example.setOrderByClause("cmt_id asc");
-        List<PamComment> comments=pamCommentMapper.selectByExample(example);
+
+        List<PamComment> comments=(List<PamComment>)DaoUtil.selectByExample(pamCommentMapper,example);
 
         //构造评论map
         Map<String,PamComment> commentMap=new HashMap<>();
@@ -100,7 +101,7 @@ public class PamCommentServiceImpl implements IPamCommentService {
         example.createCriteria().andPostIdEqualTo(postID).andCmtParentIdNotEqualTo(BASE_COMMENT);
 
         //筛选出对应动态的所有子评论 按评论id排序
-        List<PamComment> chidComments=pamCommentMapper.selectByExample(example);
+        List<PamComment> chidComments=(List<PamComment>)DaoUtil.selectByExample(pamCommentMapper,example);
         int index=0;
         for(PamComment childComment:chidComments){
            PamComment comment=commentMap.get(childComment.getCmtParentId());

@@ -43,7 +43,7 @@ public class PamLikeServiceImpl implements IPamLikeService {
     public int countActionByOtherUser(String id) {
         PmPostExample postExample=new PmPostExample();
         postExample.createCriteria().andUserIdEqualTo(id);
-        List<PmPost> posts=pmPostMapper.selectByExample(postExample);
+        List<PmPost> posts=(List<PmPost>) DaoUtil.selectByExample(pmPostMapper,postExample);
         int count=0;
         for(PmPost post:posts){
             count+=post.getPostLikeCount();

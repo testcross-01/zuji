@@ -52,7 +52,7 @@ public class BmPostMarkServiceImpl implements IBmPostMarkService {
         //根据post id查询所有标记记录
         BmPostMarkExample bmPostMarkExample=new BmPostMarkExample();
         bmPostMarkExample.createCriteria().andPostIdEqualTo(postId);
-        List<BmPostMark> marks= postMarkMapper.selectByExample(bmPostMarkExample);
+        List<BmPostMark> marks= (List<BmPostMark>)DaoUtil.selectByExample(postMarkMapper,bmPostMarkExample);
 
         //根据tagid字段建立集合（可以优化改为用sql）
         List<String> tagIds=new LinkedList<String>();
@@ -63,7 +63,8 @@ public class BmPostMarkServiceImpl implements IBmPostMarkService {
         //根据标记记录查询对应的tag
         BmTagExample tagExample=new BmTagExample();
         tagExample.createCriteria().andTagIdIn(tagIds);
-        return bmTagMapper.selectByExample(tagExample);
+
+        return  DaoUtil.selectByExample(bmTagMapper,tagExample);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class BmPostMarkServiceImpl implements IBmPostMarkService {
         //根据tag id查询所有标记记录
         BmPostMarkExample bmPostMarkExample=new BmPostMarkExample();
         bmPostMarkExample.createCriteria().andTagIdEqualTo(tagId);
-        List<BmPostMark> marks=postMarkMapper.selectByExample(bmPostMarkExample);
+        List<BmPostMark> marks= (List<BmPostMark>)DaoUtil.selectByExample(postMarkMapper,bmPostMarkExample);
 
         //根据post id建立集合
         List<String> postIds=new LinkedList<String>();
@@ -82,7 +83,8 @@ public class BmPostMarkServiceImpl implements IBmPostMarkService {
         //根据动态id查询出对应的动态
         PmPostExample pmPostExample=new PmPostExample();
         pmPostExample.createCriteria().andPostIdIn(postIds);
-        return pmPostMapper.selectByExample(pmPostExample);
+
+        return DaoUtil.selectByExample(pmPostMapper,pmPostExample);
     }
 
 

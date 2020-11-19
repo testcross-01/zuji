@@ -48,7 +48,7 @@ public class BmUserMarkServiceImpl implements IBmUserMarkService {
         //根据用户查询到所有标识记录
         BmUserMarkExample userMarkExample=new BmUserMarkExample();
         userMarkExample.createCriteria().andUserIdEqualTo(userId);
-        List<BmUserMark> marks=bmUserMarkMapper.selectByExample(userMarkExample);
+        List<BmUserMark> marks= (List<BmUserMark>)DaoUtil.selectByExample(bmUserMarkMapper,userMarkExample);
 
         //构造tag id集合
         List<String > tagIds=new LinkedList<>();
@@ -59,7 +59,7 @@ public class BmUserMarkServiceImpl implements IBmUserMarkService {
         //根据tag id查询所有的标签
         BmTagExample tagExample=new BmTagExample();
         tagExample.createCriteria().andTagIdIn(tagIds);
-        return tagMapper.selectByExample(tagExample);
+        return DaoUtil.selectByExample(tagMapper,tagExample);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class BmUserMarkServiceImpl implements IBmUserMarkService {
         //根据标签查询到所有标识记录
         BmUserMarkExample userMarkExample=new BmUserMarkExample();
         userMarkExample.createCriteria().andTagIdEqualTo(tagId);
-        List<BmUserMark> marks=bmUserMarkMapper.selectByExample(userMarkExample);
+        List<BmUserMark> marks=(List<BmUserMark>)DaoUtil.selectByExample(bmUserMarkMapper,userMarkExample);;
 
         //构造 use id集合
         List<String> userIds=new LinkedList<>();
@@ -78,6 +78,6 @@ public class BmUserMarkServiceImpl implements IBmUserMarkService {
         //根据usr id集合查询所有的用户
         UimUserExample userExample=new UimUserExample();
         userExample.createCriteria().andUserIdIn(userIds);
-        return userMapper.selectByExample(userExample);
+        return DaoUtil.selectByExample(userMapper,userExample);
     }
 }

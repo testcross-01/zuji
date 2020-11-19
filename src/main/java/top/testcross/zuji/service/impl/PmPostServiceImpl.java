@@ -40,7 +40,7 @@ public class PmPostServiceImpl implements IPmPostService {
 
         //根据时间排序
         example.setOrderByClause("post_create_time asc");
-        return pmPostMapper.selectByExample(example);
+        return DaoUtil.selectByExample(pmPostMapper,example);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class PmPostServiceImpl implements IPmPostService {
         //根据id查询所有对应动态
         PmPostExample pmPostExample=new PmPostExample();
         pmPostExample.createCriteria().andPostIdIn(ids);
-        List<PmPost> posts=pmPostMapper.selectByExample(pmPostExample);
+        List<PmPost> posts=(List<PmPost>) DaoUtil.selectByExample(pmPostMapper,pmPostExample);
 
         //构建post map对象
         HashMap<String,PmPost> idToPosts=new HashMap<>();
@@ -94,7 +94,7 @@ public class PmPostServiceImpl implements IPmPostService {
         //根据id查询所有对应动态
         PmPostExample pmPostExample=new PmPostExample();
         pmPostExample.createCriteria().andPostIdIn(ids);
-        List<PmPost> posts=pmPostMapper.selectByExample(pmPostExample);
+        List<PmPost> posts=(List<PmPost>) DaoUtil.selectByExample(pmPostMapper,pmPostExample);
 
         //构建post map对象
         HashMap<String,PmPost> idToPosts=new HashMap<>();
@@ -122,7 +122,7 @@ public class PmPostServiceImpl implements IPmPostService {
         //根据图片查询获得所有img
         BmImgExample imgExample=new BmImgExample();
         imgExample.createCriteria().andImgIdIn(imgIds);
-        List<BmImg> imgs=imgMapper.selectByExample(imgExample);
+        List<BmImg> imgs=(List<BmImg>) DaoUtil.selectByExample(imgMapper,imgExample);
 
         //将首页图片放入动态中
         for(BmImg img:imgs){
@@ -143,7 +143,7 @@ public class PmPostServiceImpl implements IPmPostService {
         //根据动态id查询出所有的mark记录
         BmPostMarkExample postMarkExample=new BmPostMarkExample();
         postMarkExample.createCriteria().andPostIdIn(postIds);
-        List<BmPostMark> marks=postMarkMapper.selectByExample(postMarkExample);
+        List<BmPostMark> marks=(List<BmPostMark>)DaoUtil.selectByExample(postMarkMapper,postMarkExample);
 
         //建立tagid集合
         List<String> tagIds=new LinkedList<>();
@@ -154,7 +154,7 @@ public class PmPostServiceImpl implements IPmPostService {
         //根据tagid查询tag集合
         BmTagExample bmTagExample=new BmTagExample();
         bmTagExample.createCriteria().andTagIdIn(tagIds);
-        List<BmTag> tags=tagIds.size()<=0?new LinkedList<>():  bmTagMapper.selectByExample(bmTagExample);
+        List<BmTag> tags=(List<BmTag>) DaoUtil.selectByExample(bmTagMapper,bmTagExample);
 
 
 
@@ -186,7 +186,7 @@ public class PmPostServiceImpl implements IPmPostService {
         //根据动态id搜索所有图片
         BmImgExample imgExample=new BmImgExample();
         imgExample.createCriteria().andImgSrcTypeEqualTo((byte) 1).andImgSrcIdIn(postIds);
-        List<BmImg> imgs=imgMapper.selectByExample(imgExample);
+        List<BmImg> imgs=(List<BmImg>)DaoUtil.selectByExample(imgMapper,imgExample);
 
         //讲图片加入到动态中
         for(BmImg img:imgs){
@@ -213,7 +213,7 @@ public class PmPostServiceImpl implements IPmPostService {
         //查询出所有地址信息
         BmGeoPlaceinfoExample placeinfoExample=new BmGeoPlaceinfoExample();
         placeinfoExample.createCriteria().andPiIdIn(piIds);
-        List<BmGeoPlaceinfo> placeinfos=piIds.size()==0?new LinkedList<>():placeinfoMapper.selectByExample(placeinfoExample);
+        List<BmGeoPlaceinfo> placeinfos=(List<BmGeoPlaceinfo>) DaoUtil.selectByExample(placeinfoMapper,placeinfoExample);
 
 
         //构建pi map

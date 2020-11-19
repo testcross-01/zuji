@@ -45,7 +45,7 @@ public class PamFavoriteServiceImpl implements IPamFavoriteService {
         //查询用户对应的所有动态
         PmPostExample postExample=new PmPostExample();
         postExample.createCriteria().andUserIdEqualTo(id);
-        List<PmPost> posts=pmPostMapper.selectByExample(postExample);
+        List<PmPost> posts=(List<PmPost>) DaoUtil.selectByExample(pmPostMapper,postExample);
 
         //计算所有动态的收藏总和
         int count=0;
@@ -81,7 +81,7 @@ public class PamFavoriteServiceImpl implements IPamFavoriteService {
         //通过用户id搜索所有收藏记录
         PamFavoriteExample favoriteExample=new PamFavoriteExample();
         favoriteExample.createCriteria().andUserIdEqualTo(id);
-        List<PamFavorite> favorites=pamFavoriteMapper.selectByExample(favoriteExample);
+        List<PamFavorite> favorites=(List<PamFavorite>)DaoUtil.selectByExample(pamFavoriteMapper,favoriteExample);
 
         //构造pi_id集合
         List<String> pis=new LinkedList<String>();
@@ -92,6 +92,6 @@ public class PamFavoriteServiceImpl implements IPamFavoriteService {
         //通过收藏记录中的pi_id搜索对应的地理信息
         BmGeoPlaceinfoExample geoPlaceinfoExample=new BmGeoPlaceinfoExample();
         geoPlaceinfoExample.createCriteria().andPiIdIn(pis);
-        return bmGeoPlaceinfoMapper.selectByExample(geoPlaceinfoExample);
+        return DaoUtil.selectByExample(bmGeoPlaceinfoMapper,geoPlaceinfoExample);
     }
 }

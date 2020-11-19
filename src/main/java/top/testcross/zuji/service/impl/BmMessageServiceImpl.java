@@ -3,6 +3,8 @@ package top.testcross.zuji.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import top.testcross.zuji.bean.*;
 import top.testcross.zuji.bean.interfaces.DataBean;
 import top.testcross.zuji.mapper.BmMessageHMapper;
@@ -63,16 +65,18 @@ public class BmMessageServiceImpl implements IBmMessageService {
             if(message.getMsgType()!=0||message.getMsgType()!=2){
                 postIds.add(message.getMsgSrcId());
             }else if(message.getMsgType()==4){
-                BmMessageH messageH=message.createBmMessageH(message.getMsgSrcId());
-                if(DaoUtil.insert(messageHMapper,messageH)==0)
+                try{
+                    dealMessage(message,message.getMsgSrcId());
+                }catch (Exception e){
                     result=0;
+                }
             }
         }
 
         //查询出所有影响到的动态
         PmPostExample pmPostExample=new PmPostExample();
         pmPostExample.createCriteria().andPostIdIn(postIds);
-        List<PmPost> posts= postMapper.selectByExample(pmPostExample);
+        List<PmPost> posts=(List<PmPost>)DaoUtil.selectByExample(postMapper,pmPostExample);
 
         //构建post map
         Map<String,PmPost> postMap=new HashMap<>();
@@ -83,18 +87,30 @@ public class BmMessageServiceImpl implements IBmMessageService {
         //遍历messag批量处理处理
         for(BmMessage message:messages){
             PmPost post=postMap.get(message.getMsgSrcId());
-            if(post!=null){
-                String userId=post.getUserId();
-                BmMessageH messageH=message.createBmMessageH(userId);
-
-                if(DaoUtil.insert(messageMapper,messageH)==0)
+            if(post!=null) {
+                String userId = post.getUserId();
+                try {
+                    dealMessage(message,userId);
+                }catch (Exception e){
                     result=0;
-                }else {
-                    message.setMsgIsDeal(true);
-                    messageMapper.updateByPrimaryKey(message);
                 }
+            }
         }
 
         return  result;
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+    public void dealMessage(BmMessage message,String userId) throws Exception{
+        BmMessageH messageH=message.createBmMessageH(userId);
+
+        if(DaoUtil.insert(messageMapper,messageH)==0){
+           throw new Exception();
+        }else {
+            message.setMsgIsDeal(true);
+            if(DaoUtil.updateByID(messageMapper,message)==0)
+                throw new Exception();
+        }
     }
 }
