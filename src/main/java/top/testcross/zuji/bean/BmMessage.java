@@ -62,6 +62,11 @@ public class BmMessage implements DataBean {
         setMsgId(uuid);
     }
 
+    @Override
+    public String getUUID() {
+        return getMsgId();
+    }
+
     public BmMessage() {
     }
 

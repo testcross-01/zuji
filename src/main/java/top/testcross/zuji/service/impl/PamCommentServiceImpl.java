@@ -63,8 +63,15 @@ public class PamCommentServiceImpl extends ActionServiceAbstract implements IPam
 
     @Override
     public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.insert(pamCommentMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean)==0)
+        if(DaoUtil.insert(pamCommentMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
             throw new Exception("保存操作时错误");
+        return 1;
+    }
+
+    @Override
+    public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
+        if(DaoUtil.deleteByID(pamCommentMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
+            throw new Exception("取消操作时错误");
         return 1;
     }
 

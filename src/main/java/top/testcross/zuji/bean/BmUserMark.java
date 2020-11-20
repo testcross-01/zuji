@@ -37,6 +37,11 @@ public class BmUserMark implements DataBean {
         setUmId(uuid);
     }
 
+    @Override
+    public String getUUID() {
+        return getUmId();
+    }
+
 
     public BmUserMark(){
 

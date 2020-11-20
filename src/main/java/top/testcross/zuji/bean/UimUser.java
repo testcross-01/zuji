@@ -101,6 +101,11 @@ public class UimUser implements DataBean {
         setUserId(uuid);
     }
 
+    @Override
+    public String getUUID() {
+        return getUserId();
+    }
+
     public UimUser() {
     }
 

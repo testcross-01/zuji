@@ -13,11 +13,11 @@ public interface IPmPostService extends IBaseService{
     List<? extends DataBean> findPostByUserIdOrderByCreateTime(String id);
 
     /**
-     * 按照id批量查询完整的动态
+     * 按照id批量查询完整的动态(包含userId时会查出用户对动态的操作)
      * @param ids
      * @return
      */
-    List<? extends DataBean> findPostInIds(List<String> ids);
+    List<? extends DataBean> findPostInIds(List<String> ids,String userId);
 
 
     /**

@@ -37,6 +37,11 @@ public class BmPostMark implements DataBean {
         setPmId(uuid);
     }
 
+    @Override
+    public String getUUID() {
+        return getPmId();
+    }
+
     public BmPostMark(){
 
     }

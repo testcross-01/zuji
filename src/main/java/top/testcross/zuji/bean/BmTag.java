@@ -45,6 +45,11 @@ public class BmTag implements DataBean {
         setTagId(uuid);
     }
 
+    @Override
+    public String getUUID() {
+        return getTagId();
+    }
+
     public BmTag() {
     }
 

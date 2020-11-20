@@ -56,10 +56,23 @@ public class PamFavorite implements ActionDataBean {
     }
 
     @Override
+    public String getUUID() {
+        return getFavId();
+    }
+
+    @Override
     public BmMessage createMessage() {
         if(postId==null||userId==null||favCreateTime==null)
             return new BmMessage();
-        BmMessage message=new BmMessage(null,(byte)1,userId,favCreateTime,postId,false);
+        BmMessage message=new BmMessage(null,(byte)2,userId,favCreateTime,postId,false);
+        return message;
+    }
+
+    @Override
+    public BmMessage createUoDoMessage() {
+        if(postId==null||userId==null||favCreateTime==null)
+            return new BmMessage();
+        BmMessage message=new BmMessage(null,(byte)6,userId,favCreateTime,postId,false);
         return message;
     }
 

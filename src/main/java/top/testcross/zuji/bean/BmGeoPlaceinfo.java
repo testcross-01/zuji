@@ -59,6 +59,11 @@ public class BmGeoPlaceinfo implements DataBean {
         setPiId(uuid);
     }
 
+    @Override
+    public String getUUID() {
+        return getPiId();
+    }
+
     public BmGeoPlaceinfo(){
 
     }

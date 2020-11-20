@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import top.testcross.zuji.bean.*;
+import top.testcross.zuji.mapper.PmPostMapper;
 import top.testcross.zuji.mapper.UimFollowMapper;
 import top.testcross.zuji.mapper.UimUserMapper;
 import top.testcross.zuji.service.IBmImgService;
@@ -33,23 +34,19 @@ class ZujiApplicationTests {
 	@Autowired
 	IBmImgService imgService;
 
-
+	@Autowired
+	PmPostMapper pmPostMapper;
 	@Test
 	void contextLoads() throws Exception {
-		List<BmImg> imgs=new LinkedList<>();
-		BmImg bmImg=new BmImg();
-		for(int i=0;i<6;i++){
-			bmImg=new BmImg();
-			bmImg.setAuditStatus(true);
-			bmImg.setImgCont("img");
-			if(i!=3)
-			bmImg.setImgSrcId(DaoUtil.getUUID());
+		UimFollowExample example=new UimFollowExample();
+		List<String> uids=new LinkedList<>();
 
-			bmImg.setImgSrcType((byte)1);
-			imgs.add(bmImg);
-		}
+		example.createCriteria().andUserIdIn(uids);
+		//uimFollowMapper.selectByExample(example);
+		uids.add("123");
+		example.createCriteria().andUserIdEqualTo(null);
+		uimFollowMapper.selectByExample(example);
 
-		imgService.saveImgs(imgs);
 	}
 
 	void count(Object mapper,Object example) throws Exception {
@@ -57,5 +54,8 @@ class ZujiApplicationTests {
 		Method method= clazz.getMethod("countByExample", example.getClass());
 		System.out.println(method.invoke(mapper,example));
 	}
+
+
+
 
 }

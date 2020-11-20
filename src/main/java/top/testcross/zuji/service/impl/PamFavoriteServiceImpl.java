@@ -60,7 +60,14 @@ public class PamFavoriteServiceImpl extends ActionServiceAbstract implements IPa
 
     @Override
     public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.insert(pamFavoriteMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean)==0)
+        if(DaoUtil.insert(pamFavoriteMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
+            throw new Exception("保存操作时出错");
+        return 1;
+    }
+
+    @Override
+    public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
+        if(DaoUtil.deleteByID(pamFavoriteMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
             throw new Exception("保存操作时出错");
         return 1;
     }

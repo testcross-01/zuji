@@ -53,6 +53,11 @@ public class BmImg implements DataBean {
         setImgId(uuid);
     }
 
+    @Override
+    public String getUUID() {
+        return getImgId();
+    }
+
     public BmImg(){
 
     }

@@ -49,10 +49,23 @@ public class UimFollow implements ActionDataBean {
     }
 
     @Override
+    public String getUUID() {
+        return getFollowId();
+    }
+
+    @Override
     public BmMessage createMessage() {
         if(userId==null||followUserId==null)
             return new BmMessage();
-        BmMessage message=new BmMessage(null,(byte)1,userId,null,followUserId,false);
+        BmMessage message=new BmMessage(null,(byte)4,userId,null,followUserId,false);
+        return message;
+    }
+
+    @Override
+    public BmMessage createUoDoMessage() {
+        if(userId==null||followUserId==null)
+            return new BmMessage();
+        BmMessage message=new BmMessage(null,(byte)7,userId,null,followUserId,false);
         return message;
     }
 }

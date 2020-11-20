@@ -48,10 +48,22 @@ public class PamLike implements ActionDataBean {
     }
 
     @Override
+    public String getUUID() {
+        return getLikeId();
+    }
+
+    @Override
     public BmMessage createMessage() {
         if(postId==null||userId==null||likeCreateTime==null)
             return new BmMessage();
         BmMessage message=new BmMessage(null,(byte)1,userId,likeCreateTime,postId,false);
+        return message;
+    }
+
+    @Override
+    public BmMessage createUoDoMessage() { if(postId==null||userId==null||likeCreateTime==null)
+        return new BmMessage();
+        BmMessage message=new BmMessage(null,(byte)5,userId,likeCreateTime,postId,false);
         return message;
     }
 

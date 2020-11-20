@@ -147,6 +147,11 @@ public class DaoUtil {
                 }
 
                 @Override
+                public String getUUID() {
+                    return null;
+                }
+
+                @Override
                 public int hashCode() {
                     return super.hashCode();
                 }
@@ -164,6 +169,11 @@ public class DaoUtil {
                 public void setUUID(String uuid) {
 
                 }
+
+                @Override
+                public String getUUID() {
+                    return null;
+                }
             };
         } catch (InvocationTargetException e) {
             e.printStackTrace();
@@ -172,6 +182,11 @@ public class DaoUtil {
                 @Override
                 public int hashCode() {
                     return super.hashCode();
+                }
+
+                @Override
+                public String getUUID() {
+                    return null;
                 }
 
                 @Override
@@ -190,6 +205,11 @@ public class DaoUtil {
                 @Override
                 public void setUUID(String uuid) {
 
+                }
+
+                @Override
+                public String getUUID() {
+                    return null;
                 }
             };
         }

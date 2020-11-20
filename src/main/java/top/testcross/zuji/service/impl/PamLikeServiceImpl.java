@@ -55,8 +55,15 @@ public class PamLikeServiceImpl extends ActionServiceAbstract implements IPamLik
 
     @Override
     public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.insert(pamLikeMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean)==0)
-            throw new Exception();
+        if(DaoUtil.insert(pamLikeMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
+            throw new Exception("点赞失败");
+        return 1;
+    }
+
+    @Override
+    public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
+        if(DaoUtil.deleteByID(pamLikeMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
+            throw new Exception("取消点赞失败");
         return 1;
     }
 

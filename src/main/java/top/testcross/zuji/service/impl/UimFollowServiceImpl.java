@@ -58,8 +58,15 @@ public class UimFollowServiceImpl extends ActionServiceAbstract implements IUimF
 
     @Override
     public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.insert(uimFollowMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean)==0)
+        if(DaoUtil.insert(uimFollowMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
             throw new Exception("关注保存时出错");
+        return 1;
+    }
+
+    @Override
+    public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
+        if(DaoUtil.deleteByID(uimFollowMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
+            throw new Exception("取注保存时出错");
         return 1;
     }
 }

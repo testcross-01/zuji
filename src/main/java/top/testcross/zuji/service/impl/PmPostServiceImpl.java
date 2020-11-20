@@ -65,7 +65,7 @@ public class PmPostServiceImpl implements IPmPostService {
 
 
     @Override
-    public List<? extends DataBean> findPostInIds(List<String> ids) {
+    public List<? extends DataBean> findPostInIds(List<String> ids,String userId) {
         if(ids.size()<=0)return new LinkedList<>();
 
         //根据id查询所有对应动态
@@ -231,6 +231,19 @@ public class PmPostServiceImpl implements IPmPostService {
         }
 
     }
+
+
+    /**
+     *
+     * @param postIds
+     * @param userId
+     * @param postMap
+     */
+    private void addLikeIdToPosts(List<String> postIds,String userId,HashMap<String,PmPost> postMap){
+
+    }
+
+
 
 
 }

@@ -130,9 +130,24 @@ public class PmPost implements DataBean {
      */
     private BmImg cpImg;
 
+    /**
+     * 当前用户对应此动态的fav id
+     */
+    String favId;
+
+    /**
+     * 当前用户对应此动态的like id
+     */
+    String likeId;
+
     @Override
     public void setUUID(String uuid) {
         setPostId(uuid);
+    }
+
+    @Override
+    public String getUUID() {
+        return getPostId();
     }
 
     public PmPost() {

@@ -89,10 +89,23 @@ public class PamComment implements ActionDataBean {
     }
 
     @Override
+    public String getUUID() {
+        return getCmtId();
+    }
+
+    @Override
     public BmMessage createMessage() {
         if(postId==null||userId==null||cmtCreateTime==null)
             return new BmMessage();
-        BmMessage message=new BmMessage(null,(byte)1,userId,cmtCreateTime,postId,false);
+        BmMessage message=new BmMessage(null,(byte)3,userId,cmtCreateTime,postId,false);
+        return message;
+    }
+
+    @Override
+    public BmMessage createUoDoMessage() {
+        if(postId==null||userId==null||cmtCreateTime==null)
+            return new BmMessage();
+        BmMessage message=new BmMessage(null,(byte)8,userId,cmtCreateTime,postId,false);
         return message;
     }
 
