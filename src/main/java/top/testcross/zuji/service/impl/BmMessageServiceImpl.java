@@ -13,10 +13,7 @@ import top.testcross.zuji.mapper.PmPostMapper;
 import top.testcross.zuji.service.IBmMessageService;
 import top.testcross.zuji.util.DaoUtil;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class BmMessageServiceImpl implements IBmMessageService {
@@ -60,10 +57,10 @@ public class BmMessageServiceImpl implements IBmMessageService {
         List<BmMessage> messages=(List<BmMessage>) DaoUtil.selectByExample(messageMapper,messageExample);
 
         //构建post id集合
-        List<String> postIds=new LinkedList<>();
+        Set<String> postSet=new HashSet<>();
         for(BmMessage message:messages){
             if(message.getMsgType()!=0||message.getMsgType()!=2){
-                postIds.add(message.getMsgSrcId());
+                postSet.add(message.getMsgSrcId());
             }else if(message.getMsgType()==4){
                 try{
                     dealMessage(message,message.getMsgSrcId());
@@ -75,6 +72,8 @@ public class BmMessageServiceImpl implements IBmMessageService {
 
         //查询出所有影响到的动态
         PmPostExample pmPostExample=new PmPostExample();
+        List<String> postIds=new LinkedList<>(postSet);
+        postIds.remove("-1");
         pmPostExample.createCriteria().andPostIdIn(postIds);
         List<PmPost> posts=(List<PmPost>)DaoUtil.selectByExample(postMapper,pmPostExample);
 
@@ -105,8 +104,8 @@ public class BmMessageServiceImpl implements IBmMessageService {
     public void dealMessage(BmMessage message,String userId) throws Exception{
         BmMessageH messageH=message.createBmMessageH(userId);
 
-        if(DaoUtil.insert(messageMapper,messageH)==0){
-           throw new Exception();
+        if(DaoUtil.insert(messageHMapper,messageH)==0){
+           throw new Exception("messageH归档异常");
         }else {
             message.setMsgIsDeal(true);
             if(DaoUtil.updateByID(messageMapper,message)==0)

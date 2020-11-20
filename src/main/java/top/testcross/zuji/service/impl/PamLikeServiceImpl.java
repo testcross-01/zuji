@@ -2,20 +2,22 @@ package top.testcross.zuji.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import top.testcross.zuji.bean.PamLikeExample;
 import top.testcross.zuji.bean.PmPost;
 import top.testcross.zuji.bean.PmPostExample;
+import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
 import top.testcross.zuji.mapper.PamLikeMapper;
 import top.testcross.zuji.mapper.PmPostMapper;
-import top.testcross.zuji.service.IPamFavoriteService;
 import top.testcross.zuji.service.IPamLikeService;
 import top.testcross.zuji.util.DaoUtil;
 
 import java.util.List;
 
 @Service
-public class PamLikeServiceImpl implements IPamLikeService {
+public class PamLikeServiceImpl extends ActionServiceAbstract implements IPamLikeService  {
 
     @Autowired
     PamLikeMapper pamLikeMapper;
@@ -52,8 +54,16 @@ public class PamLikeServiceImpl implements IPamLikeService {
     }
 
     @Override
-    public int save(DataBean dataBean) {
-        return DaoUtil.insert(pamLikeMapper,dataBean);
+    public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
+        if(DaoUtil.insert(pamLikeMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean)==0)
+            throw new Exception();
+        return 1;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+    public int save(DataBean dataBean) throws Exception{
+        return saveAndCreateMessage((ActionDataBean)dataBean);
     }
 
     @Override

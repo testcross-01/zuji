@@ -83,6 +83,7 @@ public class PmPostServiceImpl implements IPmPostService {
         addImgsToPosts(ids,idToPosts);
         addTagsToPosts(ids,idToPosts);
         addPIToPosts(ids,idToPosts);
+        addCpImgToPosts(ids,idToPosts);
 
         return posts;
     }

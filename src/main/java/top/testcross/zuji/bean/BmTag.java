@@ -44,4 +44,14 @@ public class BmTag implements DataBean {
     public void setUUID(String uuid) {
         setTagId(uuid);
     }
+
+    public BmTag() {
+    }
+
+    public BmTag(String tagId, String tagName, String tagIntro, Byte tagType) {
+        this.tagId = tagId;
+        this.tagName = tagName;
+        this.tagIntro = tagIntro;
+        this.tagType = tagType;
+    }
 }

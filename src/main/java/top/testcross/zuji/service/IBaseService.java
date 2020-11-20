@@ -8,9 +8,9 @@ import top.testcross.zuji.bean.interfaces.DataBean;
  */
 public interface IBaseService {
 
-    int save(DataBean dataBean);
-    int deleteByID(String id);
-    int modifyByID(DataBean dataBean);
-    DataBean findByID(String id);
+    int save(DataBean dataBean) throws Exception;
+    int deleteByID(String id) throws  Exception;
+    int modifyByID(DataBean dataBean) throws Exception;
+    DataBean findByID(String id) throws Exception;
 
 }

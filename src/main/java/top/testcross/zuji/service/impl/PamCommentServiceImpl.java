@@ -2,15 +2,17 @@ package top.testcross.zuji.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import top.testcross.zuji.bean.PamComment;
 import top.testcross.zuji.bean.PamCommentExample;
 import top.testcross.zuji.bean.PmPost;
 import top.testcross.zuji.bean.PmPostExample;
+import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
 import top.testcross.zuji.mapper.PamCommentMapper;
 import top.testcross.zuji.mapper.PmPostMapper;
 import top.testcross.zuji.service.IPamCommentService;
-import top.testcross.zuji.service.IPamService;
 import top.testcross.zuji.util.DaoUtil;
 
 import java.util.HashMap;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class PamCommentServiceImpl implements IPamCommentService {
+public class PamCommentServiceImpl extends ActionServiceAbstract implements IPamCommentService {
     private static final String BASE_COMMENT="-1";
 
     @Autowired
@@ -60,8 +62,16 @@ public class PamCommentServiceImpl implements IPamCommentService {
     }
 
     @Override
-    public int save(DataBean dataBean) {
-        return DaoUtil.insert(pamCommentMapper,dataBean);
+    public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
+        if(DaoUtil.insert(pamCommentMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean)==0)
+            throw new Exception("保存操作时错误");
+        return 1;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+    public int save(DataBean dataBean) throws Exception {
+        return saveAndCreateMessage((ActionDataBean) dataBean);
     }
 
     @Override

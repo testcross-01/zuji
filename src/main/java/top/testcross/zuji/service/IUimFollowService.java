@@ -1,6 +1,8 @@
 package top.testcross.zuji.service;
 
-public interface IUimFollowService extends IBaseService {
-    int countFollowersByUser(String userId);
-    int countFollowByUser(String userId);
+import top.testcross.zuji.bean.interfaces.ActionDataBean;
+
+public interface IUimFollowService extends IActionService {
+    int countFollowersByUser(String userId) throws Exception;
+    int countFollowByUser(String userId) throws Exception;
 }

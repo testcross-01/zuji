@@ -1,10 +1,13 @@
 package top.testcross.zuji.service;
 
+import top.testcross.zuji.bean.interfaces.ActionDataBean;
+import top.testcross.zuji.bean.interfaces.DataBean;
+
 /**
  * 动态操作类型的接口
  * 实现各种统计操作（方便更新时替换）
  */
-public interface IPamService extends IBaseService{
+public interface IPamService extends IActionService{
 
 
     /**
@@ -12,19 +15,23 @@ public interface IPamService extends IBaseService{
      * @param id
      * @return 操作总数
      */
-    int countActionByUser(String id);
+    int countActionByUser(String id) throws Exception;
 
     /**
      * 计算某个动态被用户进行某操作的数量
      * @param id
      * @return 操作总数
      */
-    int countActionByPost(String id);
+    int countActionByPost(String id) throws Exception;
 
     /**
      * 计算被其他用户进行的某操作的数量
      * @param id
      * @return 操作总数
      */
-    int countActionByOtherUser(String id);
+    int countActionByOtherUser(String id) throws Exception;
+
+
+
+
 }

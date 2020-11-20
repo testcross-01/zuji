@@ -58,4 +58,17 @@ public class BmGeoPlaceinfo implements DataBean {
     public void setUUID(String uuid) {
         setPiId(uuid);
     }
+
+    public BmGeoPlaceinfo(){
+
+    }
+
+    public BmGeoPlaceinfo(String piId, String piAddress, String piCity, String piCountry, String piPoiType, String piName) {
+        this.piId = piId;
+        this.piAddress = piAddress;
+        this.piCity = piCity;
+        this.piCountry = piCountry;
+        this.piPoiType = piPoiType;
+        this.piName = piName;
+    }
 }

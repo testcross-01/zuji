@@ -2,7 +2,10 @@ package top.testcross.zuji.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import top.testcross.zuji.bean.*;
+import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
 import top.testcross.zuji.mapper.BmGeoPlaceinfoMapper;
 import top.testcross.zuji.mapper.PamFavoriteMapper;
@@ -14,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
-public class PamFavoriteServiceImpl implements IPamFavoriteService {
+public class PamFavoriteServiceImpl extends ActionServiceAbstract implements IPamFavoriteService {
     @Autowired
     PamFavoriteMapper pamFavoriteMapper;
 
@@ -56,8 +59,16 @@ public class PamFavoriteServiceImpl implements IPamFavoriteService {
     }
 
     @Override
-    public int save(DataBean dataBean) {
-        return DaoUtil.insert(pamFavoriteMapper,dataBean);
+    public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
+        if(DaoUtil.insert(pamFavoriteMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean)==0)
+            throw new Exception("保存操作时出错");
+        return 1;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+    public int save(DataBean dataBean) throws Exception {
+        return saveAndCreateMessage((ActionDataBean)dataBean);
     }
 
     @Override

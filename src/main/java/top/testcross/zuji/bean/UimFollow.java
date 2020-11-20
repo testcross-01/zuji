@@ -33,6 +33,16 @@ public class UimFollow implements ActionDataBean {
      */
     private String followUserId;
 
+    public UimFollow(){
+
+    }
+
+    public UimFollow(String followId, String userId, String followUserId) {
+        this.followId = followId;
+        this.userId = userId;
+        this.followUserId = followUserId;
+    }
+
     @Override
     public void setUUID(String uuid) {
         setFollowId(uuid);

@@ -52,4 +52,16 @@ public class BmImg implements DataBean {
     public void setUUID(String uuid) {
         setImgId(uuid);
     }
+
+    public BmImg(){
+
+    }
+
+    public BmImg(String imgId, String imgSrcId, Byte imgSrcType, String imgCont, Boolean auditStatus) {
+        this.imgId = imgId;
+        this.imgSrcId = imgSrcId;
+        this.imgSrcType = imgSrcType;
+        this.imgCont = imgCont;
+        this.auditStatus = auditStatus;
+    }
 }

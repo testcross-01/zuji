@@ -36,4 +36,15 @@ public class BmUserMark implements DataBean {
     public void setUUID(String uuid) {
         setUmId(uuid);
     }
+
+
+    public BmUserMark(){
+
+    }
+
+    public BmUserMark(String umId, String userId, String tagId) {
+        this.umId = umId;
+        this.userId = userId;
+        this.tagId = tagId;
+    }
 }

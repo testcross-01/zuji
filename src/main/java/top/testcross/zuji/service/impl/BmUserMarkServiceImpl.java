@@ -2,6 +2,7 @@ package top.testcross.zuji.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigurationImportSelector;
+import org.springframework.stereotype.Service;
 import top.testcross.zuji.bean.*;
 import top.testcross.zuji.bean.interfaces.DataBean;
 import top.testcross.zuji.mapper.BmTagMapper;
@@ -13,6 +14,7 @@ import top.testcross.zuji.util.DaoUtil;
 import java.util.LinkedList;
 import java.util.List;
 
+@Service
 public class BmUserMarkServiceImpl implements IBmUserMarkService {
     @Autowired
     BmUserMarkMapper bmUserMarkMapper;

@@ -36,4 +36,14 @@ public class BmPostMark implements DataBean {
     public void setUUID(String uuid) {
         setPmId(uuid);
     }
+
+    public BmPostMark(){
+
+    }
+
+    public BmPostMark(String pmId, String postId, String tagId) {
+        this.pmId = pmId;
+        this.postId = postId;
+        this.tagId = tagId;
+    }
 }
