@@ -70,9 +70,9 @@ public class PamFavorite implements ActionDataBean {
 
     @Override
     public BmMessage createUoDoMessage() {
-        if(postId==null||userId==null||favCreateTime==null)
+        if(postId==null||userId==null)
             return new BmMessage();
-        BmMessage message=new BmMessage(null,(byte)6,userId,favCreateTime,postId,false);
+        BmMessage message=new BmMessage(null,(byte)6,userId,new Date(System.currentTimeMillis()),postId,false);
         return message;
     }
 

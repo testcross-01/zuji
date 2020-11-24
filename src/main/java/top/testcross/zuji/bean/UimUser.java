@@ -3,6 +3,8 @@ package top.testcross.zuji.bean;
 import lombok.Data;
 import top.testcross.zuji.bean.interfaces.DataBean;
 
+import java.util.List;
+
 /**
  * Table: uim_user
  */
@@ -95,6 +97,17 @@ public class UimUser implements DataBean {
      * Nullable:  false
      */
     private Integer userFollowCount;
+
+    /**
+     * 用户照片
+     */
+    private BmImg dpImg;
+
+
+    /**
+     * 用户标签
+     */
+    private List<BmTag> tags;
 
     @Override
     public void setUUID(String uuid) {

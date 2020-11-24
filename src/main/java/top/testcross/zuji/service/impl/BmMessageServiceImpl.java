@@ -47,61 +47,10 @@ public class BmMessageServiceImpl implements IBmMessageService {
     }
 
 
-    @Override
-    public int dealMessages() {
-        int result=1;
-        //查出所有未处理消息
-        BmMessageExample messageExample=new BmMessageExample();
-        messageExample.createCriteria().andMsgIsDealEqualTo(false);
-
-        List<BmMessage> messages=(List<BmMessage>) DaoUtil.selectByExample(messageMapper,messageExample);
-
-        //构建post id集合
-        Set<String> postSet=new HashSet<>();
-        for(BmMessage message:messages){
-            if(message.getMsgType()!=0||message.getMsgType()!=2){
-                postSet.add(message.getMsgSrcId());
-            }else if(message.getMsgType()==4){
-                try{
-                    dealMessage(message,message.getMsgSrcId());
-                }catch (Exception e){
-                    result=0;
-                }
-            }
-        }
-
-        //查询出所有影响到的动态
-        PmPostExample pmPostExample=new PmPostExample();
-        List<String> postIds=new LinkedList<>(postSet);
-        postIds.remove("-1");
-        pmPostExample.createCriteria().andPostIdIn(postIds);
-        List<PmPost> posts=(List<PmPost>)DaoUtil.selectByExample(postMapper,pmPostExample);
-
-        //构建post map
-        Map<String,PmPost> postMap=new HashMap<>();
-        for (PmPost post:posts){
-            postMap.put(post.getPostId(),post);
-        }
-
-        //遍历messag批量处理处理
-        for(BmMessage message:messages){
-            PmPost post=postMap.get(message.getMsgSrcId());
-            if(post!=null) {
-                String userId = post.getUserId();
-                try {
-                    dealMessage(message,userId);
-                }catch (Exception e){
-                    result=0;
-                }
-            }
-        }
-
-        return  result;
-    }
 
 
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public void dealMessage(BmMessage message,String userId) throws Exception{
+    public DataBean dealMessage(BmMessage message,String userId) throws Exception{
         BmMessageH messageH=message.createBmMessageH(userId);
 
         if(DaoUtil.insert(messageHMapper,messageH)==0){
@@ -111,5 +60,7 @@ public class BmMessageServiceImpl implements IBmMessageService {
             if(DaoUtil.updateByID(messageMapper,message)==0)
                 throw new Exception();
         }
+
+        return  messageH;
     }
 }

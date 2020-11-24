@@ -4,13 +4,14 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
+import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
 
 /**
  * Table: pm_post
  */
 @Data
-public class PmPost implements DataBean {
+public class PmPost implements ActionDataBean {
     /**
      * 动态id
      *
@@ -170,5 +171,21 @@ public class PmPost implements DataBean {
         this.imgs = imgs;
         this.tags = tags;
         this.cpImg = cpImg;
+    }
+
+    @Override
+    public BmMessage createMessage() {
+        if(userId==null||postCreateTime==null||postId==null)
+            return new BmMessage();
+        BmMessage message=new BmMessage(null,(byte)9,userId,postCreateTime,postId,false);
+        return message;
+    }
+
+    @Override
+    public BmMessage createUoDoMessage() {
+        if(userId==null||postId==null)
+            return new BmMessage();
+        BmMessage message=new BmMessage(null,(byte)10,userId,new Date(System.currentTimeMillis()),postId,false);
+        return message;
     }
 }

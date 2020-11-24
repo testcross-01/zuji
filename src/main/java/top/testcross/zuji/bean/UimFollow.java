@@ -4,6 +4,8 @@ import lombok.Data;
 import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
 
+import java.util.Date;
+
 /**
  * Table: uim_follow
  */
@@ -57,7 +59,7 @@ public class UimFollow implements ActionDataBean {
     public BmMessage createMessage() {
         if(userId==null||followUserId==null)
             return new BmMessage();
-        BmMessage message=new BmMessage(null,(byte)4,userId,null,followUserId,false);
+        BmMessage message=new BmMessage(null,(byte)4,userId,new Date(System.currentTimeMillis()),followUserId,false);
         return message;
     }
 
@@ -65,7 +67,7 @@ public class UimFollow implements ActionDataBean {
     public BmMessage createUoDoMessage() {
         if(userId==null||followUserId==null)
             return new BmMessage();
-        BmMessage message=new BmMessage(null,(byte)7,userId,null,followUserId,false);
+        BmMessage message=new BmMessage(null,(byte)7,userId,new Date(System.currentTimeMillis()),followUserId,false);
         return message;
     }
 }

@@ -59,15 +59,31 @@ public class PamFavoriteServiceImpl extends ActionServiceAbstract implements IPa
     }
 
     @Override
+    public DataBean selectByUserIdAndPostId(String userId, String postId) throws Exception {
+        PamFavoriteExample example=new PamFavoriteExample();
+        example.createCriteria().andUserIdEqualTo(userId).andPostIdEqualTo(postId);
+        List<? extends DataBean>dataBeans=DaoUtil.selectByExample(pamFavoriteMapper,example);
+        if(dataBeans.size()==0)return new PamFavorite();
+
+        return dataBeans.get(0);
+    }
+
+    @Override
+    public int deleteByUserIdAndPostId(String userId, String postId) throws Exception {
+        DataBean dataBean=selectByUserIdAndPostId(userId,postId);
+        return deleteAndCreateMessage((ActionDataBean) dataBean);
+    }
+
+    @Override
     public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.insert(pamFavoriteMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
+        if(actionDataBean==null||DaoUtil.insert(pamFavoriteMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
             throw new Exception("保存操作时出错");
         return 1;
     }
 
     @Override
     public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.deleteByID(pamFavoriteMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
+        if(actionDataBean==null||DaoUtil.deleteByID(pamFavoriteMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
             throw new Exception("保存操作时出错");
         return 1;
     }

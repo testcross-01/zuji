@@ -2,8 +2,12 @@ package top.testcross.zuji.service.impl;
 
 import com.sun.javaws.exceptions.BadMimeTypeResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import top.testcross.zuji.bean.*;
+import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
 import top.testcross.zuji.mapper.*;
 import top.testcross.zuji.service.IPmPostService;
@@ -15,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
-public class PmPostServiceImpl implements IPmPostService {
+public class PmPostServiceImpl extends ActionServiceAbstract implements IPmPostService {
     @Autowired
     PmPostMapper pmPostMapper;
 
@@ -31,6 +35,13 @@ public class PmPostServiceImpl implements IPmPostService {
     @Autowired
     BmGeoPlaceinfoMapper placeinfoMapper;
 
+    @Autowired
+    PamFavoriteMapper favoriteMapper;
+
+    @Autowired
+    PamLikeMapper likeMapper;
+
+
 
 
     @Override
@@ -44,13 +55,16 @@ public class PmPostServiceImpl implements IPmPostService {
     }
 
     @Override
-    public int save(DataBean dataBean) {
-        return DaoUtil.insert(pmPostMapper,dataBean);
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+    public int save(DataBean dataBean) throws Exception{
+        return saveAndCreateMessage((ActionDataBean) dataBean);
     }
 
     @Override
-    public int deleteByID(String id) {
-        return DaoUtil.deleteByID(pmPostMapper,id);
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+    public int deleteByID(String id) throws Exception{
+        PmPost post=(PmPost) findByID(id);
+        return deleteAndCreateMessage((ActionDataBean)post);
     }
 
     @Override
@@ -106,6 +120,13 @@ public class PmPostServiceImpl implements IPmPostService {
         addCpImgToPosts(ids,idToPosts);
 
         return posts;
+    }
+
+    @Override
+    public int countPostByUser(String userID) {
+        PmPostExample example=new PmPostExample();
+        example.createCriteria().andUserIdEqualTo(userID);
+        return pmPostMapper.countByExample(example);
     }
 
     /**
@@ -234,16 +255,60 @@ public class PmPostServiceImpl implements IPmPostService {
 
 
     /**
-     *
+     * 向动态中添加当前用户喜爱id
      * @param postIds
      * @param userId
      * @param postMap
      */
-    private void addLikeIdToPosts(List<String> postIds,String userId,HashMap<String,PmPost> postMap){
+    private void addLikeIdToPosts(List<String> postIds,String userId,HashMap<String,PmPost> postMap) {
+        //搜索本人所有的like记录
+        PamLikeExample example=new PamLikeExample();
+        example.createCriteria().andUserIdEqualTo(userId);
+        List<PamLike> likes=(List<PamLike>) DaoUtil.selectByExample(likeMapper,example);
+
+        //遍历记录将id放到对应的动态中
+        for(PamLike like:likes){
+            PmPost post=postMap.get(like.getPostId());
+            if(post!=null){
+                post.setLikeId(like.getLikeId());
+            }
+        }
 
     }
 
+    /**
+     * 向动态中添加当前用户收藏id
+     * @param postIds
+     * @param userId
+     * @param postMap
+     */
+    private void addFavIdToPosts(List<String> postIds,String userId,HashMap<String,PmPost> postMap){
+        //搜索本人所有的fav记录
+        PamFavoriteExample example=new PamFavoriteExample();
+        example.createCriteria().andUserIdEqualTo(userId);
+        List<PamFavorite> favorites=(List<PamFavorite>) DaoUtil.selectByExample(favoriteMapper,example);
+
+        //遍历记录将id放到对应的动态中
+        for(PamFavorite favorite:favorites){
+            PmPost post=postMap.get(favorite.getPostId());
+            if(post!=null){
+                post.setLikeId(favorite.getFavId());
+            }
+        }
+    }
 
 
+    @Override
+    public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
+        if(DaoUtil.insert(pmPostMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
+            throw new Exception("创建动态失败");
+        return 1;
+    }
 
+    @Override
+    public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
+        if(DaoUtil.deleteByID(pmPostMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
+            throw new Exception("删除动态失败");
+        return 1;
+    }
 }

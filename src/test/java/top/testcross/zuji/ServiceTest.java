@@ -12,6 +12,7 @@ import top.testcross.zuji.bean.interfaces.DataBean;
 import top.testcross.zuji.mapper.PamCommentMapper;
 import top.testcross.zuji.mapper.PamFavoriteMapper;
 import top.testcross.zuji.mapper.PamLikeMapper;
+import top.testcross.zuji.process.MessageHandler;
 import top.testcross.zuji.service.*;
 import top.testcross.zuji.util.DaoUtil;
 
@@ -63,19 +64,24 @@ public class ServiceTest {
 
     @Test
     public void basicTest() throws Exception{
-        UimUser user=new UimUser(null,0,0,(byte)1,0,"宋紫璇","","123","hello",0,0);
+        UimUser user=new UimUser(null,0,0,(byte)1,0,"田中","","123","hello",0,0);
 
         int result=uimUserService.save(user);
 
-        PmPost post=new PmPost(null,0,0,0,0,"a",true,"","你好，世界！","",user.getUserId(),new Date(System.currentTimeMillis()),null,null,null,null);
+        PmPost post=new PmPost(null,0,0,0,2,"a",true,"","你好，世界！","",user.getUserId(),new Date(System.currentTimeMillis()),null,null,null,null);
 
         pmPostService.save(post);
     }
 
     @Test
+    public void deletePost() throws Exception{
+        pmPostService.deleteByID("3bb3f425bbb04a7e8a3adc5fe80c93d8");
+    }
+
+    @Test
     public void postAction() throws Exception{
         PamFavorite pamFavorite=new PamFavorite(null,"8502fa2ce96c414d8e338688d7fe754d","5bd70addaa824a7ca85def358e02e898","",new Date(System.currentTimeMillis()));
-        PamComment comment=new PamComment(null,"我太喜欢你了","5bd70addaa824a7ca85def358e02e898",null,"8502fa2ce96c414d8e338688d7fe754d",(byte)1,"",new Date(System.currentTimeMillis()),null);
+        PamComment comment=new PamComment(null,"你好","5bd70addaa824a7ca85def358e02e898",null,"8502fa2ce96c414d8e338688d7fe754d",(byte)1,"",new Date(System.currentTimeMillis()),null);
         PamLike like=new PamLike(null,"8502fa2ce96c414d8e338688d7fe754d","5bd70addaa824a7ca85def358e02e898",new Date(System.currentTimeMillis()));
 
         favoriteService.save(pamFavorite);
@@ -88,8 +94,8 @@ public class ServiceTest {
     public void comments() throws Exception{
         String parentId="ff2e888b44174ce9828bed3c03e6624d";
         PamComment comment=new PamComment(null,"我也是","5bd70addaa824a7ca85def358e02e898",parentId,"dfe40755e10446658cf822901e8b4e6f",(byte)1,"233",new Date(System.currentTimeMillis()),null);
-        for(int i=0;i<10;i++)
-        commentService.save(comment);
+//        for(int i=0;i<10;i++)
+//        commentService.save(comment);
     }
 
     @Autowired
@@ -193,6 +199,7 @@ public class ServiceTest {
         List<? extends  DataBean> dataBeans= userMarkService.findTagByUser("dfe40755e10446658cf822901e8b4e6f");
     }
 
+
     @Autowired
     PamLikeMapper likeMapper;
 
@@ -204,6 +211,9 @@ public class ServiceTest {
 
     @Autowired
     IBmMessageService messageService;
+
+    @Autowired
+    MessageHandler messageHandler;
 
     @Test
     public void message() throws Exception{
@@ -223,9 +233,22 @@ public class ServiceTest {
 
 
 
-        messageService.dealMessages();
+        //messageService.dealMessages();
+        messageHandler.dealMessages();
+
+    }
 
 
+    @Test
+    public void undo() throws Exception{
+        try{
+            likeService.deleteByUserIdAndPostId("8502fa2ce96c414d8e338688d7fe754d","5bd70addaa824a7ca85def358e02e898");
+        }catch (Exception ex){
+
+        }
+
+        favoriteService.deleteByUserIdAndPostId("8502fa2ce96c414d8e338688d7fe754d","5bd70addaa824a7ca85def358e02e898");
+        commentService.deleteByID("27b35f4cc2a047e0a4448a62df48477e");
     }
 
 

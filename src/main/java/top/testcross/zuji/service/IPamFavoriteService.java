@@ -11,4 +11,20 @@ public interface IPamFavoriteService extends IPamService{
      * @return 地点信息集合
      */
     List<? extends DataBean> findFavoritePlaceByUser(String id);
+
+    /**
+     * 查询用户对应的操作记录
+     * @param userId
+     * @param postId
+     * @return
+     */
+    DataBean selectByUserIdAndPostId(String userId,String postId) throws Exception;
+
+    /**
+     * 删除用户对应的操作记录
+     * @param userId
+     * @param postId
+     * @return
+     */
+    int deleteByUserIdAndPostId(String userId,String postId) throws Exception;
 }

@@ -87,8 +87,15 @@ public class BmMessage implements DataBean {
         //根据不同情况放入不同的消息内容
         switch (this.getMsgType()){
             case 1:messageH.setMsgCont(BmMessageH.LIKE_ACTION);break;
+            case 2:messageH.setMsgCont(BmMessageH.FAV_ACTION);break;
             case 3:messageH.setMsgCont(BmMessageH.CMT_ACTION);break;
             case 4:messageH.setMsgCont(BmMessageH.FOLLOW_ACTION);break;
+            case 5:messageH.setMsgCont(BmMessageH.UNDO_LIKE_ACTION);break;
+            case 6:messageH.setMsgCont(BmMessageH.UNDO_FAV_ACTION);break;
+            case 7:messageH.setMsgCont(BmMessageH.UNDO_FOLLOW_ACTION);break;
+            case 8:messageH.setMsgCont(BmMessageH.UNDO_CMT_ACTION);break;
+            case 9:messageH.setMsgCont(BmMessageH.CREATE_POST);break;
+            case 10:messageH.setMsgCont(BmMessageH.DELETE_POST);break;
         }
         return  messageH;
     }

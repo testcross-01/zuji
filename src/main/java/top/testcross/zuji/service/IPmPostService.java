@@ -4,7 +4,7 @@ import top.testcross.zuji.bean.interfaces.DataBean;
 
 import java.util.List;
 
-public interface IPmPostService extends IBaseService{
+public interface IPmPostService extends IActionService{
     /**
      * 根据用户查询到所有动态,按时间升序排列
      * @param id
@@ -26,4 +26,11 @@ public interface IPmPostService extends IBaseService{
      * @return
      */
     List<? extends DataBean> findPartPostInIds(List<String> ids);
+
+    /**
+     * 根据用户统计动态数
+     * @param userID
+     * @return 动态数量
+     */
+    int countPostByUser(String userID);
 }

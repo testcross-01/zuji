@@ -12,6 +12,8 @@ import top.testcross.zuji.mapper.UimFollowMapper;
 import top.testcross.zuji.service.IUimFollowService;
 import top.testcross.zuji.util.DaoUtil;
 
+import java.util.List;
+
 
 @Service
 public class UimFollowServiceImpl extends ActionServiceAbstract implements IUimFollowService {
@@ -57,15 +59,31 @@ public class UimFollowServiceImpl extends ActionServiceAbstract implements IUimF
     }
 
     @Override
+    public int deleteByUserIdAndFollowUserId(String userId, String followUserId) throws Exception {
+        DataBean dataBean=selectByUserIdAndFollowUserId(userId,followUserId);
+        return deleteAndCreateMessage((ActionDataBean)dataBean);
+    }
+
+    @Override
+    public DataBean selectByUserIdAndFollowUserId(String userId, String followUserId) throws Exception {
+        UimFollowExample example=new UimFollowExample();
+        example.createCriteria().andUserIdEqualTo(userId).andFollowUserIdEqualTo(followUserId);
+        List<? extends DataBean> dataBeans=DaoUtil.selectByExample(uimFollowMapper,example);
+
+        if(dataBeans.size()==0)return new UimFollow();
+        return dataBeans.get(0);
+    }
+
+    @Override
     public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.insert(uimFollowMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
+        if(actionDataBean==null||DaoUtil.insert(uimFollowMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
             throw new Exception("关注保存时出错");
         return 1;
     }
 
     @Override
     public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.deleteByID(uimFollowMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
+        if(actionDataBean==null||DaoUtil.deleteByID(uimFollowMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
             throw new Exception("取注保存时出错");
         return 1;
     }

@@ -65,6 +65,11 @@ public class BmMessageH implements DataBean {
      */
     private String userId;
 
+    /**
+     * 消息创建人信息
+     */
+    private UimUser user;
+
 
     public static final String LIKE_ACTION="点赞了你的照片";
 
@@ -74,7 +79,17 @@ public class BmMessageH implements DataBean {
 
     public static final String CMT_ACTION="评论了你的动态";
 
+    public static final String UNDO_CMT_ACTION="删除评论";
 
+    public static final String UNDO_FOLLOW_ACTION="取消关注";
+
+    public static final String UNDO_LIKE_ACTION="取消点赞";
+
+    public static final String UNDO_FAV_ACTION="取消收藏";
+
+    public static final String CREATE_POST="发表了动态";
+
+    public static final String DELETE_POST="删除动态";
 
     @Override
     public void setUUID(String uuid) {

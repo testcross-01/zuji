@@ -61,16 +61,19 @@ public class PamCommentServiceImpl extends ActionServiceAbstract implements IPam
         return count;
     }
 
+
+
+
     @Override
     public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.insert(pamCommentMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
+        if(actionDataBean==null||DaoUtil.insert(pamCommentMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
             throw new Exception("保存操作时错误");
         return 1;
     }
 
     @Override
     public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.deleteByID(pamCommentMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
+        if(actionDataBean==null||DaoUtil.deleteByID(pamCommentMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
             throw new Exception("取消操作时错误");
         return 1;
     }
@@ -82,8 +85,10 @@ public class PamCommentServiceImpl extends ActionServiceAbstract implements IPam
     }
 
     @Override
-    public int deleteByID(String id) {
-        return DaoUtil.deleteByID(pamCommentMapper,id);
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+    public int deleteByID(String id) throws Exception {
+        DataBean dataBean=findByID(id);
+        return deleteAndCreateMessage((ActionDataBean)dataBean);
     }
 
     @Override

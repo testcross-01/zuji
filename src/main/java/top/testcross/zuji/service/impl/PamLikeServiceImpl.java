@@ -1,9 +1,11 @@
 package top.testcross.zuji.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import top.testcross.zuji.bean.PamLike;
 import top.testcross.zuji.bean.PamLikeExample;
 import top.testcross.zuji.bean.PmPost;
 import top.testcross.zuji.bean.PmPostExample;
@@ -54,15 +56,31 @@ public class PamLikeServiceImpl extends ActionServiceAbstract implements IPamLik
     }
 
     @Override
+    public DataBean selectByUserIdAndPostId(String userId, String postId) {
+        PamLikeExample example=new PamLikeExample();
+        example.createCriteria().andUserIdEqualTo(userId).andPostIdEqualTo(postId);
+        List<? extends DataBean> likes=DaoUtil.selectByExample(pamLikeMapper,example);
+        if(likes.size()==0)return new PamLike();
+        return likes.get(0);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+    public int deleteByUserIdAndPostId(String userId, String postId) throws Exception{
+        DataBean dataBean=selectByUserIdAndPostId(userId,postId);
+        return deleteAndCreateMessage((ActionDataBean)dataBean);
+    }
+
+    @Override
     public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.insert(pamLikeMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
+        if(actionDataBean==null||DaoUtil.insert(pamLikeMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
             throw new Exception("点赞失败");
         return 1;
     }
 
     @Override
     public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.deleteByID(pamLikeMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
+        if(actionDataBean==null||DaoUtil.deleteByID(pamLikeMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
             throw new Exception("取消点赞失败");
         return 1;
     }
