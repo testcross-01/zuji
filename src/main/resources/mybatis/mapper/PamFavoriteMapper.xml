@@ -40,10 +40,15 @@
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
                 <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
+                  <if test="criterion.value != null and criterion.value.size>0">
+                    and ${criterion.condition}
+                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                      #{listItem}
+                    </foreach>
+                  </if>
+                  <if test="criterion.value == null or criterion.value.size==0">
+                    and 1=0
+                  </if>
                 </when>
               </choose>
             </foreach>
@@ -74,10 +79,15 @@
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
                 <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
+                  <if test="criterion.value != null and criterion.value.size>0">
+                    and ${criterion.condition}
+                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                      #{listItem}
+                    </foreach>
+                  </if>
+                  <if test="criterion.value == null or criterion.value.size==0">
+                    and 1=0
+                  </if>
                 </when>
               </choose>
             </foreach>

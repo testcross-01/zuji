@@ -118,7 +118,7 @@ public class PmPostServiceImpl extends ActionServiceAbstract implements IPmPostS
         }
 
         addCpImgToPosts(ids,idToPosts);
-
+        addPIToPosts(ids,idToPosts);
         return posts;
     }
 

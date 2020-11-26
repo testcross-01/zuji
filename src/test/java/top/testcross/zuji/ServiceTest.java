@@ -9,9 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import top.testcross.zuji.bean.*;
 import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
-import top.testcross.zuji.mapper.PamCommentMapper;
-import top.testcross.zuji.mapper.PamFavoriteMapper;
-import top.testcross.zuji.mapper.PamLikeMapper;
+import top.testcross.zuji.mapper.*;
 import top.testcross.zuji.process.MessageHandler;
 import top.testcross.zuji.service.*;
 import top.testcross.zuji.util.DaoUtil;
@@ -64,11 +62,11 @@ public class ServiceTest {
 
     @Test
     public void basicTest() throws Exception{
-        UimUser user=new UimUser(null,0,0,(byte)1,0,"田中","","123","hello",0,0);
+        UimUser user=new UimUser(null,0,0,(byte)0,0,"步","1"," "," ",0,0,0,0,0);
 
-        int result=uimUserService.save(user);
+        //int result=uimUserService.save(user);
 
-        PmPost post=new PmPost(null,0,0,0,2,"a",true,"","你好，世界！","",user.getUserId(),new Date(System.currentTimeMillis()),null,null,null,null);
+        PmPost post=new PmPost(null,0,0,0,2,"a",true,"","你好，世界！","429eba79ffdc494693cbba38ca4046fe","af18860f7d36476fbc1608eebb9770ce",new Date(System.currentTimeMillis()),null,null,null,null);
 
         pmPostService.save(post);
     }
@@ -249,8 +247,111 @@ public class ServiceTest {
 
         favoriteService.deleteByUserIdAndPostId("8502fa2ce96c414d8e338688d7fe754d","5bd70addaa824a7ca85def358e02e898");
         commentService.deleteByID("27b35f4cc2a047e0a4448a62df48477e");
+
+
+    }
+    @Autowired
+    PmPostMapper pmPostMapper;
+
+    @Autowired
+    BmGeoPlaceinfoMapper geoPlaceinfoMapper;
+
+    @Test
+    public void testSelectException(){
+        //测试搜索时的异常
+
+        //允许list为空或list的size为0
+
+        //BadSQL异常
+        try{
+//            PmPostExample example=new PmPostExample();
+//            example.createCriteria().andPostIdIn(new LinkedList<>());
+//            DaoUtil.selectByExample(pmPostMapper,example);
+              BmGeoPlaceinfoExample example=new BmGeoPlaceinfoExample();
+              example.createCriteria().andPiIdIn(new LinkedList<>());
+              System.out.println( geoPlaceinfoMapper.selectByExample(example));
+
+        }catch (Exception ex){
+            System.err.println("size为0---------------------------------------------------");
+            System.err.println(ex);
+        }
+
+        //空指针异常
+        try{
+            PmPostExample example=new PmPostExample();
+            example.createCriteria().andPostIdIn(null);
+            DaoUtil.selectByExample(pmPostMapper,example);
+            //pmPostMapper.selectByExample(example);
+        }catch (Exception ex){
+            System.err.println("集合为null------------------------------------------------------------------");
+            System.err.println(ex);
+        }
+
+        //不报异常
+        try{
+            System.out.println( pmPostMapper.selectByPrimaryKey(null));
+        }catch (Exception ex){
+            System.err.println("PrimaryKey为null------------------------------------------------");
+            System.err.println(ex);
+        }
+
+        //不报异常
+        try{
+            pmPostMapper.selectByPrimaryKey("122333");
+        }catch (Exception ex){
+            System.err.println("PrimaryKey不存在------------------------------------------------");
+            System.err.println(ex);
+        }
+
     }
 
+    @Test
+    public void testSaveException(){
+
+        //DataIntegrityViolationException
+        try{
+            pmPostMapper.insert(new PmPost());
+        }catch (Exception ex){
+            System.err.println("约束异常------------------------------------------------");
+            System.err.println(ex);
+        }
+
+        try{
+            System.out.println(pmPostMapper.insert(null));
+
+        }catch (Exception ex){
+            System.err.println("存储对象为空------------------------------------------------");
+            System.err.println(ex);
+        }
+
+    }
+    @Autowired
+    UimFollowMapper followMapper;
+
+    @Test
+    public void testUpdateException(){
+
+        //更新对象不存在 返回为0
+        try{
+            PmPost post=new PmPost();
+            post.setUUID("123");
+            System.out.println(pmPostMapper.updateByPrimaryKey(post));
+        }catch (Exception ex){
+            System.err.println("更新对象不存在-----------------------------------------------");
+            System.err.println(ex);
+        }
+
+
+        //更新对象违反外键约束 DataIntegrityViolationException
+        try{
+            UimFollow follow=new UimFollow("d7370b0d2dd043c08de08f01c167f0b8","123","123");
+            System.out.println(DaoUtil.updateByID(followMapper,follow));
+        }catch (Exception ex){
+            System.err.println("更新对象违反外键约束-----------------------------------------------");
+            System.err.println(ex);
+        }
+
+    }
 
 
 }

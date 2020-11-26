@@ -10,4 +10,6 @@ public interface IUimUserService extends IBaseService{
      * @return 用户信息
      */
     DataBean findCompleteUser(String userId);
+
+
 }

@@ -43,8 +43,8 @@
     </javaClientGenerator>
 
     <!-- 指定逆向生成哪张表 -->
-<!--    <table schema="DB2ADMIN" tableName="uim_user" domainObjectName="UimUser" >-->
-<!--    </table>-->
+    <table schema="DB2ADMIN" tableName="uim_user" domainObjectName="UimUser" >
+    </table>
 
 <!--    <table schema="DB2ADMIN" tableName="uim_follow" domainObjectName="UimFollow" >-->
 <!--    </table>-->
@@ -78,8 +78,8 @@
 <!--        <columnOverride column="msg_cont" javaType="java.lang.String" jdbcType="VARCHAR" />-->
 <!--    </table>-->
 
-    <table schema="DB2ADMIN" tableName="bm_message"  >
-    </table>
+<!--    <table schema="DB2ADMIN" tableName="bm_message"  >-->
+<!--    </table>-->
 
 <!--    <table schema="DB2ADMIN" tableName="bm_img"  >-->
 <!--        <columnOverride column="img_cont" javaType="java.lang.String" jdbcType="VARCHAR" />-->

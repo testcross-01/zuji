@@ -99,6 +99,30 @@ public class UimUser implements DataBean {
     private Integer userFollowCount;
 
     /**
+     * 用户所到城市数量
+     *
+     * Column:    user_city_count
+     * Nullable:  false
+     */
+    private Integer userCityCount;
+
+    /**
+     * 用户所到国家数量
+     *
+     * Column:    user_cnty_count
+     * Nullable:  false
+     */
+    private Integer userCntyCount;
+
+    /**
+     * 用户所到地区数量
+     *
+     * Column:    user_place_count
+     * Nullable:  false
+     */
+    private Integer userPlaceCount;
+
+    /**
      * 用户照片
      */
     private BmImg dpImg;
@@ -122,7 +146,7 @@ public class UimUser implements DataBean {
     public UimUser() {
     }
 
-    public UimUser(String userId, Integer userPostCount, Integer userImgCount, Byte userSex, Integer userLafCount, String userName, String userDpId, String userPassword, String userIntro, Integer userFollowerCount, Integer userFollowCount) {
+    public UimUser(String userId, Integer userPostCount, Integer userImgCount, Byte userSex, Integer userLafCount, String userName, String userDpId, String userPassword, String userIntro, Integer userFollowerCount, Integer userFollowCount, Integer userCityCount, Integer userCntyCount, Integer userPlaceCount) {
         this.userId = userId;
         this.userPostCount = userPostCount;
         this.userImgCount = userImgCount;
@@ -134,5 +158,8 @@ public class UimUser implements DataBean {
         this.userIntro = userIntro;
         this.userFollowerCount = userFollowerCount;
         this.userFollowCount = userFollowCount;
+        this.userCityCount = userCityCount;
+        this.userCntyCount = userCntyCount;
+        this.userPlaceCount = userPlaceCount;
     }
 }

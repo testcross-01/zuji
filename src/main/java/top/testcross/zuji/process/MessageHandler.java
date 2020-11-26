@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import top.testcross.zuji.bean.*;
+import top.testcross.zuji.mapper.BmGeoPlaceinfoMapper;
 import top.testcross.zuji.mapper.BmMessageMapper;
 import top.testcross.zuji.mapper.PmPostMapper;
 import top.testcross.zuji.service.*;
@@ -37,6 +38,9 @@ public class MessageHandler {
 
     @Autowired
     IBmImgService imgService;
+
+    @Autowired
+    BmGeoPlaceinfoMapper geoPlaceinfoMapper;
 
     @Autowired
     BmMessageMapper messageMapper;
@@ -143,6 +147,8 @@ public class MessageHandler {
                 user.setUserLafCount(likeService.countActionByOtherUser(userId)+favoriteService.countActionByOtherUser(userId));
                 //更新动态数量
                 user.setUserPostCount(pmPostService.countPostByUser(userId));
+                //更新地点数据
+                updateCntyCityPlaceNumberByUser(user);
                 break;
         }
 
@@ -174,5 +180,38 @@ public class MessageHandler {
         }
 
         pmPostService.modifyByID(post);
+    }
+
+    /**
+     * 根据用户计算国家、城市和地点数量
+     * @param user
+     * @return
+     */
+    private void updateCntyCityPlaceNumberByUser(UimUser user){
+        //查询所有动态对应的pi信息
+        PmPostExample example=new PmPostExample();
+        example.createCriteria().andUserIdEqualTo(user.getUserId());
+        List<PmPost> posts= (List<PmPost>)DaoUtil.selectByExample(postMapper,example);
+        Set<String> piIds=new HashSet<>();
+        for(PmPost post:posts){
+            piIds.add(post.getPiId());
+        }
+
+        BmGeoPlaceinfoExample placeinfoExample=new BmGeoPlaceinfoExample();
+        placeinfoExample.createCriteria().andPiIdIn(new LinkedList<>(piIds));
+        List<BmGeoPlaceinfo> placeinfos=(List<BmGeoPlaceinfo>) DaoUtil.selectByExample(geoPlaceinfoMapper,placeinfoExample);
+
+        Set<String> countrys=new HashSet<>();
+        Set<String> citys=new HashSet<>();
+
+        //建立城市和国家集合
+        for (BmGeoPlaceinfo placeinfo:placeinfos){
+           countrys.add(placeinfo.getPiCountry());
+            citys.add(placeinfo.getPiCountry()+placeinfo.getPiCity());
+        }
+
+        user.setUserCityCount(citys.size());
+        user.setUserPlaceCount(placeinfos.size());
+        user.setUserCntyCount(countrys.size());
     }
 }

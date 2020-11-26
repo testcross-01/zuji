@@ -22,7 +22,7 @@ public class DaoUtil {
     private static final String NO_SUCH_METHOD="mapper中不包含此类方法";
     private static final String ILLEGAL_ACCESS="方法使用了错误的参数";
     private static final String INVOKE_EXCEPTION="方法执行错误";
-    private static final String BAD_SQL_EXCEPTION="sql有误";
+    private static final String BAD_SQL_EXCEPTION="sql语法有误";
     private static final String WTF="耗子尾汁";//乱调用方法导致错误
 
 
@@ -222,7 +222,7 @@ public class DaoUtil {
      * @param example
      * @return 查询到的集合
      */
-    public  static List<? extends DataBean> selectByExample(Mapper mapper, Example example){
+    public  static List<? extends DataBean> selectByExample(Mapper mapper, Example example) {
         try{
             Method selectByExample=mapper.getClass().getMethod("selectByExample",example.getClass());
             return (List<? extends DataBean>)selectByExample.invoke(mapper,example);
@@ -237,14 +237,6 @@ public class DaoUtil {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
             System.out.println(INVOKE_EXCEPTION);
-            return new LinkedList<>();
-        }catch (BadSqlGrammarException e) {
-            e.printStackTrace();
-            System.out.println(BAD_SQL_EXCEPTION);
-            return new LinkedList<>();
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(WTF);
             return new LinkedList<>();
         }
 
