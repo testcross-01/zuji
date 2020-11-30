@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import top.testcross.zuji.bean.BmImgExample;
 import top.testcross.zuji.bean.PmPost;
 import top.testcross.zuji.bean.PmPostExample;
 import top.testcross.zuji.bean.interfaces.DataBean;
@@ -45,15 +46,22 @@ public class BmImgServiceImpl implements IBmImgService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public int saveImgs(List<? extends DataBean> dataBeans) throws Exception {
+    public int saveImgs(List<? extends DataBean> dataBeans){
         //循环批量插入图片
         for (DataBean dataBean:dataBeans){
-            int result=DaoUtil.insert(imgMapper,dataBean);
-            if(result==0){
-                throw new Exception("图片数据插入异常");
-            }
+            DaoUtil.insert(imgMapper,dataBean);
         }
         return 1;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+    public int deleteImgsBySrcId(String srcId) {
+        //根据srcId删除所有的照片
+        BmImgExample example=new BmImgExample();
+        example.createCriteria().andImgSrcIdEqualTo(srcId);
+
+        return DaoUtil.deleteByExample(imgMapper,example);
     }
 
     @Override

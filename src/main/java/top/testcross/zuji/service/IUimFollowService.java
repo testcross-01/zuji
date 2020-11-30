@@ -4,8 +4,8 @@ import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
 
 public interface IUimFollowService extends IActionService {
-    int countFollowersByUser(String userId) throws Exception;
-    int countFollowByUser(String userId) throws Exception;
+    int countFollowersByUser(String userId);
+    int countFollowByUser(String userId);
 
     /**
      * 删除用户对于某个用户的关注
@@ -14,7 +14,7 @@ public interface IUimFollowService extends IActionService {
      * @return
      * @throws Exception
      */
-    int deleteByUserIdAndFollowUserId(String userId,String followUserId) throws Exception;
+    int deleteByUserIdAndFollowUserId(String userId,String followUserId);
 
     /**
      * 根据用户和关注用户信息查询对应记录
@@ -23,5 +23,5 @@ public interface IUimFollowService extends IActionService {
      * @return
      * @throws Exception
      */
-    DataBean selectByUserIdAndFollowUserId(String userId,String followUserId) throws Exception;
+    DataBean selectByUserIdAndFollowUserId(String userId,String followUserId);
 }

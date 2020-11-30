@@ -22,7 +22,7 @@ public class UimFollowServiceImpl extends ActionServiceAbstract implements IUimF
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public int save(DataBean dataBean) throws Exception{
+    public int save(DataBean dataBean){
         return saveAndCreateMessage((ActionDataBean)dataBean);
     }
 
@@ -59,13 +59,13 @@ public class UimFollowServiceImpl extends ActionServiceAbstract implements IUimF
     }
 
     @Override
-    public int deleteByUserIdAndFollowUserId(String userId, String followUserId) throws Exception {
+    public int deleteByUserIdAndFollowUserId(String userId, String followUserId){
         DataBean dataBean=selectByUserIdAndFollowUserId(userId,followUserId);
         return deleteAndCreateMessage((ActionDataBean)dataBean);
     }
 
     @Override
-    public DataBean selectByUserIdAndFollowUserId(String userId, String followUserId) throws Exception {
+    public DataBean selectByUserIdAndFollowUserId(String userId, String followUserId){
         UimFollowExample example=new UimFollowExample();
         example.createCriteria().andUserIdEqualTo(userId).andFollowUserIdEqualTo(followUserId);
         List<? extends DataBean> dataBeans=DaoUtil.selectByExample(uimFollowMapper,example);
@@ -75,16 +75,18 @@ public class UimFollowServiceImpl extends ActionServiceAbstract implements IUimF
     }
 
     @Override
-    public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(actionDataBean==null||DaoUtil.insert(uimFollowMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
-            throw new Exception("关注保存时出错");
+    public int saveAndCreateMessage(ActionDataBean actionDataBean) {
+        DaoUtil.insert(uimFollowMapper,actionDataBean);
+        createAndSaveMessage(actionDataBean,1);
+
         return 1;
     }
 
     @Override
-    public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(actionDataBean==null||DaoUtil.deleteByID(uimFollowMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
-            throw new Exception("取注保存时出错");
+    public int deleteAndCreateMessage(ActionDataBean actionDataBean){
+        DaoUtil.deleteByID(uimFollowMapper,actionDataBean.getUUID());
+        createAndSaveMessage(actionDataBean,0);
+
         return 1;
     }
 }

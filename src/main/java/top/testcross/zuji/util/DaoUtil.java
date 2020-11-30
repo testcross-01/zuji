@@ -1,9 +1,16 @@
 package top.testcross.zuji.util;
 
 
+import org.omg.CORBA.UNKNOWN;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
+import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import top.testcross.zuji.bean.interfaces.DataBean;
 import top.testcross.zuji.bean.interfaces.Example;
+import top.testcross.zuji.exception.DaoUtilException;
+import top.testcross.zuji.exception.ExceptionLog;
 import top.testcross.zuji.mapper.Mapper;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,14 +23,7 @@ import java.util.UUID;
  * dao用到的工具类
  */
 public class DaoUtil {
-    /**
-     * 错误日志
-     */
-    private static final String NO_SUCH_METHOD="mapper中不包含此类方法";
-    private static final String ILLEGAL_ACCESS="方法使用了错误的参数";
-    private static final String INVOKE_EXCEPTION="方法执行错误";
-    private static final String BAD_SQL_EXCEPTION="sql语法有误";
-    private static final String WTF="耗子尾汁";//乱调用方法导致错误
+
 
 
     /**
@@ -47,21 +47,11 @@ public class DaoUtil {
             Method insert=mapper.getClass().getMethod("insert",dataBean.getClass());
             return (int)insert.invoke(mapper,dataBean);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            System.out.println(NO_SUCH_METHOD);
-            return 0;
+            throw new DaoUtilException(ExceptionLog.NO_SUCH_METHOD,e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            System.out.println(ILLEGAL_ACCESS);
-            return 0;
+            throw new DaoUtilException(ExceptionLog.ILLEGAL_ACCESS,e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            System.out.println(INVOKE_EXCEPTION);
-            return 0;
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(WTF);
-            return 0;
+            throw createDaoUtilException((Exception) e.getCause());
         }
     }
 
@@ -78,21 +68,11 @@ public class DaoUtil {
             delete = mapper.getClass().getMethod("deleteByPrimaryKey",String.class);
             return (int)delete.invoke(mapper,id);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            System.out.println(NO_SUCH_METHOD);
-            return 0;
+            throw new DaoUtilException(ExceptionLog.NO_SUCH_METHOD,e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            System.out.println(ILLEGAL_ACCESS);
-            return 0;
+            throw new DaoUtilException(ExceptionLog.ILLEGAL_ACCESS,e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            System.out.println(INVOKE_EXCEPTION);
-            return 0;
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(WTF);
-            return 0;
+            throw createDaoUtilException((Exception) e.getCause());
         }
     }
 
@@ -108,21 +88,11 @@ public class DaoUtil {
             update = mapper.getClass().getMethod("updateByPrimaryKeySelective",dataBean.getClass());
             return (int)update.invoke(mapper,dataBean);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            System.out.println(NO_SUCH_METHOD);
-            return 0;
+            throw new DaoUtilException(ExceptionLog.NO_SUCH_METHOD,e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            System.out.println(ILLEGAL_ACCESS);
-            return 0;
+            throw new DaoUtilException(ExceptionLog.ILLEGAL_ACCESS,e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            System.out.println(INVOKE_EXCEPTION);
-            return 0;
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(WTF);
-            return 0;
+            throw createDaoUtilException((Exception) e.getCause());
         }
     }
 
@@ -137,81 +107,12 @@ public class DaoUtil {
         try {
             select = mapper.getClass().getMethod("selectByPrimaryKey",String.class);
             return (DataBean) select.invoke(mapper,id);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            System.out.println(NO_SUCH_METHOD);
-            return new DataBean() {
-                @Override
-                public void setUUID(String uuid) {
-
-                }
-
-                @Override
-                public String getUUID() {
-                    return null;
-                }
-
-                @Override
-                public int hashCode() {
-                    return super.hashCode();
-                }
-            };
+        }catch (NoSuchMethodException e) {
+            throw new DaoUtilException(ExceptionLog.NO_SUCH_METHOD,e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            System.out.println(ILLEGAL_ACCESS);
-            return new DataBean() {
-                @Override
-                public int hashCode() {
-                    return super.hashCode();
-                }
-
-                @Override
-                public void setUUID(String uuid) {
-
-                }
-
-                @Override
-                public String getUUID() {
-                    return null;
-                }
-            };
+            throw new DaoUtilException(ExceptionLog.ILLEGAL_ACCESS,e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            System.out.println(INVOKE_EXCEPTION);
-            return new DataBean() {
-                @Override
-                public int hashCode() {
-                    return super.hashCode();
-                }
-
-                @Override
-                public String getUUID() {
-                    return null;
-                }
-
-                @Override
-                public void setUUID(String uuid) {
-
-                }
-            };
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(WTF);
-            return new DataBean() {
-                @Override
-                public int hashCode() {
-                    return super.hashCode();
-                }
-                @Override
-                public void setUUID(String uuid) {
-
-                }
-
-                @Override
-                public String getUUID() {
-                    return null;
-                }
-            };
+            throw createDaoUtilException((Exception) e.getCause());
         }
 
     }
@@ -227,19 +128,53 @@ public class DaoUtil {
             Method selectByExample=mapper.getClass().getMethod("selectByExample",example.getClass());
             return (List<? extends DataBean>)selectByExample.invoke(mapper,example);
         }catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            System.out.println(NO_SUCH_METHOD);
-            return new LinkedList<>();
+            throw new DaoUtilException(ExceptionLog.NO_SUCH_METHOD,e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            System.out.println(ILLEGAL_ACCESS);
-            return new LinkedList<>();
+            throw new DaoUtilException(ExceptionLog.ILLEGAL_ACCESS,e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            System.out.println(INVOKE_EXCEPTION);
-            return new LinkedList<>();
+            throw createDaoUtilException((Exception) e.getCause());
+        }
+    }
+
+    /**
+     * 根据example删除记录
+     * @param mapper
+     * @param example
+     * @return 是否成功
+     */
+    public static int deleteByExample(Mapper mapper, Example example){
+        try{
+            Method deleteByByExample=mapper.getClass().getMethod("deleteByExample",example.getClass());
+            return (int)deleteByByExample.invoke(mapper,example);
+        }catch (NoSuchMethodException e) {
+            throw new DaoUtilException(ExceptionLog.NO_SUCH_METHOD,e);
+        } catch (IllegalAccessException e) {
+            throw new DaoUtilException(ExceptionLog.ILLEGAL_ACCESS,e);
+        } catch (InvocationTargetException e) {
+            throw createDaoUtilException((Exception) e.getCause());
+        }
+    }
+
+    /**
+     * 根据不同的cause异常来建立对应的异常处理
+     * @param ex
+     * @return
+     */
+    private static DaoUtilException createDaoUtilException(Exception ex){
+        DaoUtilException daoUtilException=null;
+        if(ex instanceof DataIntegrityViolationException){
+            daoUtilException=new DaoUtilException(ExceptionLog.INTEGRITY_EXCEPTION,ex);
+        }else if(ex instanceof InvalidDataAccessResourceUsageException){
+            daoUtilException=new DaoUtilException(ExceptionLog.ACCESS_RESOURCE_USAGE_EXCEPTION, ex);
+        }else if(ex instanceof UncategorizedDataAccessException){
+            daoUtilException=new DaoUtilException(ExceptionLog.UNCATEGORIZED_EXCEPTION,ex);
+        }else if(ex instanceof DataAccessResourceFailureException){
+            daoUtilException=new DaoUtilException(ExceptionLog.ACCESS_RESOURCE_EXCEPTION, ex);
+        }else{
+            daoUtilException=new DaoUtilException(ExceptionLog.UNKNOW_EXCEPTION,ex);
         }
 
+        return daoUtilException;
     }
 
 }

@@ -56,13 +56,13 @@ public class PmPostServiceImpl extends ActionServiceAbstract implements IPmPostS
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public int save(DataBean dataBean) throws Exception{
+    public int save(DataBean dataBean){
         return saveAndCreateMessage((ActionDataBean) dataBean);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public int deleteByID(String id) throws Exception{
+    public int deleteByID(String id){
         PmPost post=(PmPost) findByID(id);
         return deleteAndCreateMessage((ActionDataBean)post);
     }
@@ -135,15 +135,9 @@ public class PmPostServiceImpl extends ActionServiceAbstract implements IPmPostS
      * @param postMap
      */
     private void addCpImgToPosts(List<String> postIds,HashMap<String,PmPost> postMap){
-        //根据动态信息获得cpimg集合
-        List<String> imgIds=new LinkedList<>();
-        for(PmPost post:postMap.values()){
-            imgIds.add(post.getPostCpImgId());
-        }
-
         //根据图片查询获得所有img
         BmImgExample imgExample=new BmImgExample();
-        imgExample.createCriteria().andImgIdIn(imgIds);
+        imgExample.createCriteria().andImgSrcIdIn(postIds).andImgSrcTypeEqualTo((byte)2);
         List<BmImg> imgs=(List<BmImg>) DaoUtil.selectByExample(imgMapper,imgExample);
 
         //将首页图片放入动态中
@@ -299,16 +293,18 @@ public class PmPostServiceImpl extends ActionServiceAbstract implements IPmPostS
 
 
     @Override
-    public int saveAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.insert(pmPostMapper,actionDataBean)==0||createAndSaveMessage(actionDataBean,1)==0)
-            throw new Exception("创建动态失败");
+    public int saveAndCreateMessage(ActionDataBean actionDataBean){
+        DaoUtil.insert(pmPostMapper,actionDataBean);
+        createAndSaveMessage(actionDataBean,1);
+
         return 1;
     }
 
     @Override
-    public int deleteAndCreateMessage(ActionDataBean actionDataBean) throws Exception {
-        if(DaoUtil.deleteByID(pmPostMapper,actionDataBean.getUUID())==0||createAndSaveMessage(actionDataBean,0)==0)
-            throw new Exception("删除动态失败");
+    public int deleteAndCreateMessage(ActionDataBean actionDataBean){
+        DaoUtil.deleteByID(pmPostMapper,actionDataBean.getUUID());
+        createAndSaveMessage(actionDataBean,0);
+
         return 1;
     }
 }

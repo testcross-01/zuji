@@ -1,6 +1,7 @@
 package top.testcross.zuji.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import top.testcross.zuji.bean.BmMessage;
 import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
@@ -9,6 +10,7 @@ import top.testcross.zuji.service.IActionService;
 import top.testcross.zuji.service.IPamService;
 import top.testcross.zuji.util.DaoUtil;
 
+@Service
 public abstract class ActionServiceAbstract implements IActionService {
     @Autowired
     BmMessageMapper messageMapper;
@@ -21,7 +23,7 @@ public abstract class ActionServiceAbstract implements IActionService {
      * @return 执行情况
      * @throws Exception
      */
-    protected int createAndSaveMessage(ActionDataBean actionDataBean,int actionType) throws Exception{
+    protected int createAndSaveMessage(ActionDataBean actionDataBean,int actionType){
         BmMessage message=null;
         //根据actionType判定是添加还是撤销
         switch (actionType){

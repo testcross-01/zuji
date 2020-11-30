@@ -1,10 +1,13 @@
-package top.testcross.zuji.process;
+package top.testcross.zuji.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import top.testcross.zuji.bean.*;
+import top.testcross.zuji.exception.DaoUtilException;
+import top.testcross.zuji.exception.ExceptionLog;
+import top.testcross.zuji.exception.ServiceException;
 import top.testcross.zuji.mapper.BmGeoPlaceinfoMapper;
 import top.testcross.zuji.mapper.BmMessageMapper;
 import top.testcross.zuji.mapper.PmPostMapper;
@@ -51,8 +54,7 @@ public class MessageHandler {
 
 
 
-    public int dealMessages() {
-        int result=1;
+    public void dealMessages() {
         //查出所有未处理消息
         BmMessageExample messageExample=new BmMessageExample();
         messageExample.createCriteria().andMsgIsDealEqualTo(false);
@@ -62,21 +64,20 @@ public class MessageHandler {
         //构建post id集合
         Set<String> postSet=new HashSet<>();
         for(BmMessage message:messages){
-            if(message.getMsgType()==4||message.getMsgType()==7){
-                try{
+            try{
+                if(message.getMsgType()==4||message.getMsgType()==7){
                     dealMessage(message,message.getUserId());
-                }catch (Exception e){
-                    result=0;
-                }
-            }if(message.getMsgType()==9||message.getMsgType()==10){
-                try{
+                }if(message.getMsgType()==9||message.getMsgType()==10){
                     dealMessage(message,message.getUserId());
-                }catch (Exception e){
-                    result=0;
+                }else if(message.getMsgType()!=0){
+                    postSet.add(message.getMsgSrcId());
                 }
-            }else if(message.getMsgType()!=0){
-                postSet.add(message.getMsgSrcId());
+            }catch (DaoUtilException ex){
+                ex.printStackTrace();
+            }catch (Exception ex){
+                ex.printStackTrace();
             }
+
         }
 
         //查询出所有影响到的动态
@@ -92,32 +93,34 @@ public class MessageHandler {
             postMap.put(post.getPostId(),post);
         }
 
-        //遍历messag批量处理处理
+        //遍历messag批量处理
         for(BmMessage message:messages){
             PmPost post=postMap.get(message.getMsgSrcId());
             if(post!=null) {
                 String userId = post.getUserId();
                 try {
                     dealMessage(message,userId);
-                }catch (Exception e){
-                    result=0;
+                }catch (DaoUtilException ex){
+                    ex.printStackTrace();
+                }catch (Exception ex){
+                    ex.printStackTrace();
                 }
             }
         }
-        return  result;
+
     }
 
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public  void dealMessage(BmMessage message, String userId) throws Exception{
+    public  void dealMessage(BmMessage message, String userId){
         BmMessageH bmMessageH=(BmMessageH) messageService.dealMessage(message,userId);
         updatePost(bmMessageH);
         updateUser(bmMessageH);
     }
 
-    private void updateUser(BmMessageH messageH) throws Exception{
+    private void updateUser(BmMessageH messageH){
         String userId=messageH.getMsgAcUserId();
         UimUser user= (UimUser)userService.findByID(userId);
-        if(user==null||user.getUUID()==null)throw new Exception("更新用户数据出错");
+        if(user==null||user.getUUID()==null)throw new ServiceException(ExceptionLog.NOUSER_EXCEPTION);
 
         //根据不同情况处理消息内容
         switch (messageH.getMsgType()){
@@ -137,7 +140,7 @@ public class MessageHandler {
                 if(acUser!=null){
                     acUser.setUserFollowCount(followService.countFollowByUser(acUser.getUserId()));
                     userService.modifyByID(acUser);
-                }else throw new Exception("更新用户数据出错");
+                }else throw new ServiceException(ExceptionLog.NOUSER_EXCEPTION);
                 break;
             case 9:
             case 10:
@@ -156,7 +159,7 @@ public class MessageHandler {
     }
 
 
-    private void updatePost(BmMessageH messageH) throws Exception{
+    private void updatePost(BmMessageH messageH){
         String postId=messageH.getMsgSrcId();
         PmPost post=(PmPost)pmPostService.findByID(postId);
         if(post==null||post.getUUID()==null)return;

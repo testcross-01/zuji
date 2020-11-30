@@ -11,7 +11,15 @@ public interface IBmImgService extends IBaseService {
      * @return
      * @throws Exception
      */
-    int saveImgs(List<? extends DataBean> dataBeans) throws Exception;
+    int saveImgs(List<? extends DataBean> dataBeans);
+
+    /**
+     * 删除所有照片
+     * @param srcId
+     * @return
+     * @throws Exception
+     */
+    int deleteImgsBySrcId(String srcId);
 
 
     /**
@@ -19,5 +27,5 @@ public interface IBmImgService extends IBaseService {
      * @param userId
      * @return
      */
-    int countImgsByUser(String userId) throws Exception;
+    int countImgsByUser(String userId);
 }

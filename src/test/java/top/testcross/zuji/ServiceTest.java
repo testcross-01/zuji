@@ -7,14 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import top.testcross.zuji.bean.*;
-import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
+import top.testcross.zuji.exception.DaoUtilException;
 import top.testcross.zuji.mapper.*;
-import top.testcross.zuji.process.MessageHandler;
+import top.testcross.zuji.handler.MessageHandler;
 import top.testcross.zuji.service.*;
 import top.testcross.zuji.util.DaoUtil;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -90,10 +89,10 @@ public class ServiceTest {
 
     @Test
     public void comments() throws Exception{
-        String parentId="ff2e888b44174ce9828bed3c03e6624d";
+        String parentId="d44f9fdddf704a37895b68ce8c7c1e0a";
         PamComment comment=new PamComment(null,"我也是","5bd70addaa824a7ca85def358e02e898",parentId,"dfe40755e10446658cf822901e8b4e6f",(byte)1,"233",new Date(System.currentTimeMillis()),null);
-//        for(int i=0;i<10;i++)
-//        commentService.save(comment);
+        for(int i=0;i<10;i++)
+        commentService.save(comment);
     }
 
     @Autowired
@@ -310,12 +309,14 @@ public class ServiceTest {
 
         //DataIntegrityViolationException
         try{
-            pmPostMapper.insert(new PmPost());
+            //pmPostMapper.insert(new PmPost());
+            DaoUtil.insert(pmPostMapper,new PmPost());
         }catch (Exception ex){
             System.err.println("约束异常------------------------------------------------");
             System.err.println(ex);
         }
 
+        //DataIntegrityViolationException
         try{
             System.out.println(pmPostMapper.insert(null));
 
@@ -333,12 +334,14 @@ public class ServiceTest {
 
         //更新对象不存在 返回为0
         try{
-            PmPost post=new PmPost();
-            post.setUUID("123");
-            System.out.println(pmPostMapper.updateByPrimaryKey(post));
+            UimFollow follow=new UimFollow("321","123","123");
+
+            //System.out.println(pmPostMapper.updateByPrimaryKey(post));
+            DaoUtil.updateByID(followMapper,follow);
+
         }catch (Exception ex){
             System.err.println("更新对象不存在-----------------------------------------------");
-            System.err.println(ex);
+            ex.printStackTrace();
         }
 
 
@@ -348,9 +351,15 @@ public class ServiceTest {
             System.out.println(DaoUtil.updateByID(followMapper,follow));
         }catch (Exception ex){
             System.err.println("更新对象违反外键约束-----------------------------------------------");
-            System.err.println(ex);
+            ex.printStackTrace();
+
         }
 
+    }
+
+    @Test
+    public void throwException(){
+        throw new DaoUtilException("错误",new RuntimeException());
     }
 
 

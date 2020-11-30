@@ -96,6 +96,6 @@ public class BmPostMarkServiceImpl implements IBmPostMarkService {
      * @return
      */
     public List<? extends DataBean> findPostByTagName(String tagName){
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

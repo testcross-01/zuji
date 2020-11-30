@@ -13,7 +13,7 @@ public class Result {
     /**
      * 返回的数据结果
      */
-    private DataBean resultData;
+    private Object resultData;
 
     /**
      * 返回状态
@@ -24,7 +24,7 @@ public class Result {
 
     }
 
-    public Result(String errInfo, DataBean resultData, int status) {
+    public Result(String errInfo, Object resultData, int status) {
         this.errInfo = errInfo;
         this.resultData = resultData;
         this.status = status;

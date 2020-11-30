@@ -50,16 +50,11 @@ public class BmMessageServiceImpl implements IBmMessageService {
 
 
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public DataBean dealMessage(BmMessage message,String userId) throws Exception{
+    public DataBean dealMessage(BmMessage message,String userId){
         BmMessageH messageH=message.createBmMessageH(userId);
-
-        if(DaoUtil.insert(messageHMapper,messageH)==0){
-           throw new Exception("messageH归档异常");
-        }else {
-            message.setMsgIsDeal(true);
-            if(DaoUtil.updateByID(messageMapper,message)==0)
-                throw new Exception();
-        }
+        DaoUtil.insert(messageHMapper,messageH);
+        message.setMsgIsDeal(true);
+        DaoUtil.updateByID(messageMapper,message);
 
         return  messageH;
     }

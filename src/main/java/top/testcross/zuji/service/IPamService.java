@@ -15,21 +15,21 @@ public interface IPamService extends IActionService{
      * @param id
      * @return 操作总数
      */
-    int countActionByUser(String id) throws Exception;
+    int countActionByUser(String id);
 
     /**
      * 计算某个动态被用户进行某操作的数量
      * @param id
      * @return 操作总数
      */
-    int countActionByPost(String id) throws Exception;
+    int countActionByPost(String id);
 
     /**
      * 计算被其他用户进行的某操作的数量
      * @param id
      * @return 操作总数
      */
-    int countActionByOtherUser(String id) throws Exception;
+    int countActionByOtherUser(String id);
 
 
 

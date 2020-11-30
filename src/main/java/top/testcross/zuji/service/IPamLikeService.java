@@ -9,7 +9,7 @@ public interface IPamLikeService extends IPamService {
      * @param postId
      * @return
      */
-    DataBean selectByUserIdAndPostId(String userId, String postId) throws Exception;
+    DataBean selectByUserIdAndPostId(String userId, String postId);
 
     /**
      * 删除用户对应的操作记录
@@ -17,6 +17,6 @@ public interface IPamLikeService extends IPamService {
      * @param postId
      * @return
      */
-    int deleteByUserIdAndPostId(String userId,String postId) throws Exception;
+    int deleteByUserIdAndPostId(String userId,String postId);
 
 }

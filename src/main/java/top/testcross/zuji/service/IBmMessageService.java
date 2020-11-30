@@ -11,5 +11,5 @@ public interface IBmMessageService extends IBaseService {
      * @return messageh对象
      * @throws Exception
      */
-    public DataBean dealMessage(BmMessage message, String userId) throws Exception;
+    public DataBean dealMessage(BmMessage message, String userId);
 }
