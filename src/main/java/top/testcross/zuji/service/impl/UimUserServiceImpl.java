@@ -55,7 +55,11 @@ public class UimUserServiceImpl implements IUimUserService {
      */
     private void addImgToUser(UimUser user) {
         if(user==null)return;
-        user.setDpImg((BmImg) DaoUtil.selectByID(imgMapper,user.getUserDpId()));
+        BmImgExample imgExample=new BmImgExample();
+        imgExample.createCriteria().andImgSrcIdEqualTo(user.getUserId());
+        List<BmImg> imgs= (List<BmImg>)DaoUtil.selectByExample(imgMapper,imgExample);
+
+        user.setDpImg(imgs.get(0));
     }
 
     /**

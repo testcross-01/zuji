@@ -137,6 +137,25 @@ public class DaoUtil {
     }
 
     /**
+     * selectByExample统一入口
+     * @param mapper
+     * @param example
+     * @return 查询到的集合
+     */
+    public  static List<? extends DataBean> selectByExampleAndRowBounds(Mapper mapper, Example example) {
+        try{
+            Method selectByExample=mapper.getClass().getMethod("selectByExample",example.getClass());
+            return (List<? extends DataBean>)selectByExample.invoke(mapper,example);
+        }catch (NoSuchMethodException e) {
+            throw new DaoUtilException(ExceptionLog.NO_SUCH_METHOD,e);
+        } catch (IllegalAccessException e) {
+            throw new DaoUtilException(ExceptionLog.ILLEGAL_ACCESS,e);
+        } catch (InvocationTargetException e) {
+            throw createDaoUtilException((Exception) e.getCause());
+        }
+    }
+
+    /**
      * 根据example删除记录
      * @param mapper
      * @param example

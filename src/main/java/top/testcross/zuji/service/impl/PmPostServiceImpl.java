@@ -1,8 +1,8 @@
 package top.testcross.zuji.service.impl;
 
-import com.sun.javaws.exceptions.BadMimeTypeResponseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import top.testcross.zuji.mapper.*;
 import top.testcross.zuji.service.IPmPostService;
 import top.testcross.zuji.util.DaoUtil;
 
-import javax.print.DocFlavor;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,8 +51,16 @@ public class PmPostServiceImpl extends ActionServiceAbstract implements IPmPostS
 
         //根据时间排序
         example.setOrderByClause("post_create_time asc");
-        return DaoUtil.selectByExample(pmPostMapper,example);
+
+        List<PmPost> posts=(List<PmPost>)DaoUtil.selectByExample(pmPostMapper,example);
+
+        List<String> postIds=new LinkedList<>();
+        for(PmPost post:posts){
+            postIds.add(post.getPostId());
+        }
+        return findPostInIds(postIds,id);
     }
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
@@ -98,6 +106,8 @@ public class PmPostServiceImpl extends ActionServiceAbstract implements IPmPostS
         addTagsToPosts(ids,idToPosts);
         addPIToPosts(ids,idToPosts);
         addCpImgToPosts(ids,idToPosts);
+        addFavIdToPosts(ids,userId,idToPosts);
+        addLikeIdToPosts(ids,userId,idToPosts);
 
         return posts;
     }
@@ -255,6 +265,8 @@ public class PmPostServiceImpl extends ActionServiceAbstract implements IPmPostS
      * @param postMap
      */
     private void addLikeIdToPosts(List<String> postIds,String userId,HashMap<String,PmPost> postMap) {
+        if(userId==null)return;
+
         //搜索本人所有的like记录
         PamLikeExample example=new PamLikeExample();
         example.createCriteria().andUserIdEqualTo(userId);
@@ -277,6 +289,8 @@ public class PmPostServiceImpl extends ActionServiceAbstract implements IPmPostS
      * @param postMap
      */
     private void addFavIdToPosts(List<String> postIds,String userId,HashMap<String,PmPost> postMap){
+        if(userId==null)return;
+
         //搜索本人所有的fav记录
         PamFavoriteExample example=new PamFavoriteExample();
         example.createCriteria().andUserIdEqualTo(userId);

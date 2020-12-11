@@ -1,6 +1,7 @@
 package top.testcross.zuji.controller.app;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,18 @@ import top.testcross.zuji.exception.ExceptionLog;
 import top.testcross.zuji.exception.ZuJiException;
 import top.testcross.zuji.service.IPamFavoriteService;
 import top.testcross.zuji.service.IPamLikeService;
+import top.testcross.zuji.util.Constants;
 
 @Controller
-@RequestMapping("/fav")
+@RequestMapping(Constants.PREFIX+"/fav")
 @Api(tags = "收藏")
 public class FavController {
     @Autowired
     IPamFavoriteService favoriteService;
 
-    @PostMapping("/add")
-    public ResponseEntity saveLike(@RequestBody PamFavorite favorite){
+    @ApiOperation("收藏动态")
+    @PostMapping("/{id}")
+    public ResponseEntity saveFav(@PathVariable("id") String id,@RequestBody PamFavorite favorite){
         try{
             return new ResponseEntity(new Result("",favoriteService.save(favorite),233), HttpStatus.OK);
         }catch (ZuJiException ex){
@@ -32,8 +35,9 @@ public class FavController {
         }
     }
 
-    @DeleteMapping("/del/{id}")
-    public ResponseEntity deleteLikeById(@PathVariable("id") String favId){
+    @ApiOperation("根据favId取消收藏")
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteFavById(@PathVariable("id") String favId){
         try{
             return new ResponseEntity(new Result("",favoriteService.deleteByID(favId),233), HttpStatus.OK);
         }catch (ZuJiException ex){
@@ -43,8 +47,9 @@ public class FavController {
         }
     }
 
-    @DeleteMapping("/del")
-    public ResponseEntity deleteLikeByUserAndPost(PamFavorite favorite){
+    @ApiOperation("根据userId和postId取消收藏")
+    @DeleteMapping("/uap")
+    public ResponseEntity deleteFavByUserAndPost(PamFavorite favorite){
         try{
             return new ResponseEntity(new Result("",favoriteService.deleteByUserIdAndPostId(favorite.getUserId(),favorite.getPostId()),233), HttpStatus.OK);
         }catch (ZuJiException ex){

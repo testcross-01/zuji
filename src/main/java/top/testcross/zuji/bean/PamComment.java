@@ -3,6 +3,8 @@ package top.testcross.zuji.bean;
 import java.util.Date;
 import java.util.List;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
@@ -13,6 +15,7 @@ import javax.xml.stream.events.Comment;
  * Table: pam_comment
  */
 @Data
+@ApiModel(description = "评论模型")
 public class PamComment implements ActionDataBean {
     /**
      * 评论id
@@ -20,6 +23,7 @@ public class PamComment implements ActionDataBean {
      * Column:    cmt_id
      * Nullable:  false
      */
+    @ApiModelProperty("评论id")
     private String cmtId;
 
     /**
@@ -28,6 +32,7 @@ public class PamComment implements ActionDataBean {
      * Column:    cmt_cont
      * Nullable:  false
      */
+    @ApiModelProperty("评论内容")
     private String cmtCont;
 
     /**
@@ -36,6 +41,7 @@ public class PamComment implements ActionDataBean {
      * Column:    post_id
      * Nullable:  false
      */
+    @ApiModelProperty("动态id")
     private String postId;
 
     /**
@@ -44,6 +50,7 @@ public class PamComment implements ActionDataBean {
      * Column:    cmt_parent_id
      * Nullable:  true
      */
+    @ApiModelProperty("父评论id")
     private String cmtParentId;
 
     /**
@@ -52,6 +59,7 @@ public class PamComment implements ActionDataBean {
      * Column:    user_id
      * Nullable:  false
      */
+    @ApiModelProperty("用户id")
     private String userId;
 
     /**
@@ -60,6 +68,7 @@ public class PamComment implements ActionDataBean {
      * Column:    cmt_type
      * Nullable:  false
      */
+    @ApiModelProperty("评论类型")
     private Byte cmtType;
 
     /**
@@ -68,6 +77,7 @@ public class PamComment implements ActionDataBean {
      * Column:    cmt_target_user_id
      * Nullable:  true
      */
+    @ApiModelProperty("回复用户id")
     private String cmtTargetUserId;
 
     /**
@@ -76,11 +86,13 @@ public class PamComment implements ActionDataBean {
      * Column:    cmt_create_time
      * Nullable:  false
      */
+    @ApiModelProperty("评论创建时间")
     private Date cmtCreateTime;
 
     /**
      * 子评论
      */
+    @ApiModelProperty("子评论")
     private List<PamComment> comments;
 
     @Override

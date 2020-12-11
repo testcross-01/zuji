@@ -93,4 +93,11 @@ public interface PmPostMapper extends Mapper{
      * @mbggenerated Sun Nov 15 12:07:48 GMT+08:00 2020
      */
     int updateByPrimaryKey(PmPost record);
+
+    /**
+     * 根据计算总分获取排序获得对应的动态
+     * @param number
+     * @return
+     */
+    //List<PmPost> selectByPostOrderByScore(int number);
 }

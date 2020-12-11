@@ -1,5 +1,7 @@
 package top.testcross.zuji.bean;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import top.testcross.zuji.bean.interfaces.DataBean;
 
@@ -7,6 +9,7 @@ import top.testcross.zuji.bean.interfaces.DataBean;
  * Table: bm_img
  */
 @Data
+@ApiModel(description = "图片")
 public class BmImg implements DataBean {
     /**
      * 图片id
@@ -14,6 +17,7 @@ public class BmImg implements DataBean {
      * Column:    img_id
      * Nullable:  false
      */
+    @ApiModelProperty("图片id")
     private String imgId;
 
     /**
@@ -22,6 +26,7 @@ public class BmImg implements DataBean {
      * Column:    img_src_id
      * Nullable:  false
      */
+    @ApiModelProperty("图片来源id")
     private String imgSrcId;
 
     /**
@@ -30,6 +35,7 @@ public class BmImg implements DataBean {
      * Column:    img_src_type
      * Nullable:  false
      */
+    @ApiModelProperty("图片来源类型")
     private Byte imgSrcType;
 
     /**
@@ -38,6 +44,7 @@ public class BmImg implements DataBean {
      * Column:    img_cont
      * Nullable:  false
      */
+    @ApiModelProperty("图片内容")
     private String imgCont;
 
     /**
@@ -46,6 +53,7 @@ public class BmImg implements DataBean {
      * Column:    audit_status
      * Nullable:  false
      */
+    @ApiModelProperty("图片内容")
     private Boolean auditStatus;
 
     @Override

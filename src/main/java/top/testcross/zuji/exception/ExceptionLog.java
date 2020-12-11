@@ -25,4 +25,11 @@ public class ExceptionLog {
     public static final String NOUSER_EXCEPTION="用户不存在更新";
 
     public static final int SERVICE_EXCEPTION_STATUS=1;
+
+    /**
+     * 未实现异常
+     */
+    public static final String NOT_IMPL_EXCEPTION="方法未实现";
+
+    public static final int NOT_IMPL_EXCEPTION_STATUS=2;
 }

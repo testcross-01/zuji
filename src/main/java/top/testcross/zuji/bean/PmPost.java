@@ -3,6 +3,8 @@ package top.testcross.zuji.bean;
 import java.util.Date;
 import java.util.List;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
@@ -11,6 +13,7 @@ import top.testcross.zuji.bean.interfaces.DataBean;
  * Table: pm_post
  */
 @Data
+@ApiModel(description = "动态模型")
 public class PmPost implements ActionDataBean {
     /**
      * 动态id
@@ -18,6 +21,7 @@ public class PmPost implements ActionDataBean {
      * Column:    post_id
      * Nullable:  false
      */
+    @ApiModelProperty("动态id")
     private String postId;
 
     /**
@@ -26,6 +30,7 @@ public class PmPost implements ActionDataBean {
      * Column:    post_like_count
      * Nullable:  false
      */
+    @ApiModelProperty("动态点赞数")
     private Integer postLikeCount;
 
     /**
@@ -34,6 +39,7 @@ public class PmPost implements ActionDataBean {
      * Column:    post_fav_count
      * Nullable:  false
      */
+    @ApiModelProperty("动态收藏数")
     private Integer postFavCount;
 
     /**
@@ -42,6 +48,7 @@ public class PmPost implements ActionDataBean {
      * Column:    post_cmt_count
      * Nullable:  false
      */
+    @ApiModelProperty("动态评论数")
     private Integer postCmtCount;
 
     /**
@@ -50,14 +57,16 @@ public class PmPost implements ActionDataBean {
      * Column:    post_img_count
      * Nullable:  false
      */
+    @ApiModelProperty("动态图片数")
     private Integer postImgCount;
 
     /**
      * 动态封面对应图片id
      *
      * Column:    post_cp_img_id
-     * Nullable:  false
+     * Nullable:  true
      */
+    @ApiModelProperty(value = "动态封面对应图片id",notes = "前端无需提供")
     private String postCpImgId;
 
     /**
@@ -66,6 +75,7 @@ public class PmPost implements ActionDataBean {
      * Column:    post_visible
      * Nullable:  false
      */
+    @ApiModelProperty(value = "动态可见性",notes = "其他人是否可见（暂未实现）")
     private Boolean postVisible;
 
     /**
@@ -74,6 +84,7 @@ public class PmPost implements ActionDataBean {
      * Column:    post_intro_comment_id
      * Nullable:  false
      */
+    @ApiModelProperty(value = "动态描述对应评论id",notes = "前端无需提供（暂未实现）")
     private String postIntroCommentId;
 
     /**
@@ -82,6 +93,7 @@ public class PmPost implements ActionDataBean {
      * Column:    post_intro
      * Nullable:  false
      */
+    @ApiModelProperty(value = "动态描述")
     private String postIntro;
 
     /**
@@ -90,6 +102,7 @@ public class PmPost implements ActionDataBean {
      * Column:    pi_id
      * Nullable:  false
      */
+    @ApiModelProperty(value = "位置id",notes = "前端无需提供")
     private String piId;
 
     /**
@@ -98,6 +111,7 @@ public class PmPost implements ActionDataBean {
      * Column:    user_id
      * Nullable:  false
      */
+    @ApiModelProperty(value = "用户id")
     private String userId;
 
     /**
@@ -106,6 +120,7 @@ public class PmPost implements ActionDataBean {
      * Column:    post_create_time
      * Nullable:  false
      */
+    @ApiModelProperty(value = "动态创建时间")
     private Date postCreateTime;
 
 
@@ -113,32 +128,38 @@ public class PmPost implements ActionDataBean {
     /**
      * 动态的位置信息
      */
+    @ApiModelProperty(value = "动态的位置信息")
     private BmGeoPlaceinfo placeinfo;
 
     /**
      * 动态图片
      */
+    @ApiModelProperty(value = "动态图片")
     private List<BmImg> imgs;
 
 
     /**
      * 动态的所有tag
      */
+    @ApiModelProperty(value = "动态的所有tag")
     private List<BmTag> tags;
 
     /**
      * 封面图片
      */
+    @ApiModelProperty(value = "封面图片")
     private BmImg cpImg;
 
     /**
      * 当前用户对应此动态的fav id
      */
+    @ApiModelProperty(value = "当前用户对应此动态的fav id",notes = "前端无需提供")
     String favId;
 
     /**
      * 当前用户对应此动态的like id
      */
+    @ApiModelProperty(value = "当前用户对应此动态的like id",notes = "前端无需提供")
     String likeId;
 
     @Override

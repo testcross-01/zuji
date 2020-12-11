@@ -21,7 +21,7 @@ public class ControllerTest {
 
     @Test
     public void postController(){
-        postController.savePost(new PmPost());
+        postController.savePost("",new PmPost());
     }
 
 }

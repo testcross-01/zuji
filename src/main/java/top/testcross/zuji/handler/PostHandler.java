@@ -49,7 +49,10 @@ public class PostHandler {
 
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
     public int deletePost(PmPost post){
+        //删除图片
         imgService.deleteImgsBySrcId(post.getPostId());
+
+        //删除动态
         postService.deleteByID(post.getPostId());
 
         return 1;

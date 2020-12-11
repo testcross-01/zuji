@@ -5,6 +5,8 @@ import org.junit.runner.RunWith;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import top.testcross.zuji.bean.*;
 import top.testcross.zuji.bean.interfaces.DataBean;
@@ -59,15 +61,20 @@ public class ServiceTest {
 
 
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Test
     public void basicTest() throws Exception{
-        UimUser user=new UimUser(null,0,0,(byte)0,0,"步","1"," "," ",0,0,0,0,0);
+        String password=passwordEncoder.encode("123");
 
-        //int result=uimUserService.save(user);
+        UimUser user=new UimUser(null,0,0,(byte)0,0,"小漆","1",password," ",0,0,0,0,0);
+
+        int result=uimUserService.save(user);
 
         PmPost post=new PmPost(null,0,0,0,2,"a",true,"","你好，世界！","429eba79ffdc494693cbba38ca4046fe","af18860f7d36476fbc1608eebb9770ce",new Date(System.currentTimeMillis()),null,null,null,null);
 
-        pmPostService.save(post);
+        //pmPostService.save(post);
     }
 
     @Test
@@ -362,5 +369,14 @@ public class ServiceTest {
         throw new DaoUtilException("错误",new RuntimeException());
     }
 
+
+    @Autowired
+    IPostRecommend postRecommend;
+
+    @Test
+    public void recommend(){
+        postRecommend.recommendPostByScore(0,5);
+
+    }
 
 }

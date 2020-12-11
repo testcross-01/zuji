@@ -1,6 +1,9 @@
 package top.testcross.zuji.bean;
 
 import java.util.Date;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import top.testcross.zuji.bean.interfaces.ActionDataBean;
 import top.testcross.zuji.bean.interfaces.DataBean;
@@ -9,6 +12,7 @@ import top.testcross.zuji.bean.interfaces.DataBean;
  * Table: pam_favorite
  */
 @Data
+@ApiModel(description = "收藏模型")
 public class PamFavorite implements ActionDataBean {
     /**
      * 收藏id
@@ -16,6 +20,7 @@ public class PamFavorite implements ActionDataBean {
      * Column:    fav_id
      * Nullable:  false
      */
+    @ApiModelProperty("收藏id")
     private String favId;
 
     /**
@@ -24,6 +29,7 @@ public class PamFavorite implements ActionDataBean {
      * Column:    user_id
      * Nullable:  false
      */
+    @ApiModelProperty("用户id")
     private String userId;
 
     /**
@@ -32,6 +38,7 @@ public class PamFavorite implements ActionDataBean {
      * Column:    post_id
      * Nullable:  false
      */
+    @ApiModelProperty("动态id")
     private String postId;
 
     /**
@@ -40,6 +47,7 @@ public class PamFavorite implements ActionDataBean {
      * Column:    pi_id
      * Nullable:  false
      */
+    @ApiModelProperty("地点id")
     private String piId;
 
     /**
@@ -48,6 +56,7 @@ public class PamFavorite implements ActionDataBean {
      * Column:    fav_create_time
      * Nullable:  false
      */
+    @ApiModelProperty("收藏时间")
     private Date favCreateTime;
 
     @Override
